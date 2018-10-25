@@ -1,5 +1,3 @@
-setTimeout(init, 200);
-
 function InputTextBoxes()
 {
 	var N;
@@ -46,12 +44,10 @@ function parseInputTextBoxes(prefix="lsm_bush")
 
 		//Workload
 		parsedBoxes.s = parseInt(document.getElementById("s").value.replace(/\D/g,''), 10);
-
 		parsedBoxes.w = parseFloat(document.getElementById("w").value);
 		parsedBoxes.r = parseFloat(document.getElementById("r").value);
 		parsedBoxes.v = parseFloat(document.getElementById("v").value);
 		parsedBoxes.qL = parseFloat(document.getElementById("qL").value);
-		parsedBoxes.qS = parseFloat(document.getElementById("qS").value);
 
 		// Configuration for an architecture
 		parsedBoxes.L = parseInt(document.getElementById(prefix+"_L").value.replace(/\D/g,''), 10);
@@ -840,11 +836,10 @@ function init(){
 
 	// Workload
 	document.getElementById("s").value = 8192;
-	document.getElementById("w").value = 0.001249;
-	document.getElementById("r").value = 0.4993745;
-	document.getElementById("v").value = 0.4993745;
+	document.getElementById("w").value = 0.5;
+	document.getElementById("r").value = 0.0;
+	document.getElementById("v").value = 0.499999;
 	document.getElementById("qL").value = 0.000001;
-	document.getElementById("qS").value = 0.000001;
 	//document.getElementById("X").value = numberWithCommas(0);
 
 	initScenario1();
@@ -1268,13 +1263,11 @@ function draw_lsm_graph(prefix) {
 			"text-align: center",
 			"text-align: center",
 			"text-align: center",
-			"text-align: center",
 			"text-align: center"
 		];
-		var sum=w+qS+qL+v+r;
+		var sum=w+qL+v+r;
 		var coefficient_array = [
 			write_latency*w/sum,
-			read_latency*qS/sum,
 			read_latency*qL/sum,
 			read_latency*v/sum,
 			read_latency*r/sum,
@@ -1283,7 +1276,6 @@ function draw_lsm_graph(prefix) {
 
 		var text_array = [
 			"Update",
-			"Short Range Lookup",
 			"Long Range Lookup",
 			"Existing Point Lookup",
 			"Zero-result Point Lookup",
@@ -1293,7 +1285,6 @@ function draw_lsm_graph(prefix) {
 
 		var id_suffix_array = [
 			"_write",
-			"_short_range_lookup",
 			"_long_range_lookup",
 			"_existing_point_lookup",
 			"_zero_result_lookup",
@@ -1302,7 +1293,6 @@ function draw_lsm_graph(prefix) {
 
 		var total_function_array = [
 			getTotalUpdateCost,
-			getTotalShortRangeLookupCost,
 			getTotalLongRangeLookupCost,
 			getTotalExistingPointLookupCost,
 			getTotalNonExistingPointLookupCost,
@@ -1312,7 +1302,7 @@ function draw_lsm_graph(prefix) {
 
 		var total_cost=0;
 
-		for(j=0;j<=5;j++){
+		for(j=0;j<=4;j++){
 			var div_tmp=document.getElementById(prefix+id_suffix_array[j]);
 			removeAllChildren(div_tmp);
 			div_tmp.setAttribute("style",style_array[j]);
@@ -1395,12 +1385,10 @@ function lsh_table_cost(){
 	var v=inputParameters.v;
 	var r=inputParameters.r;
 	var qL=inputParameters.qL;
-	var qS=inputParameters.qS;
 
 	THRESHOLD = 1e-15;
 
 	var style_array= [
-		"text-align: center",
 		"text-align: center",
 		"text-align: center",
 		"text-align: center",
@@ -1411,16 +1399,14 @@ function lsh_table_cost(){
 	lsh_table_array = [
 		1/(B*hash_table_gc_threshold),
 		N/B,
-		N/B,
 		"1",
 		"0",
 		N*key_size*8
 	];
 
-	var sum=r+qL+qS+v+w;
+	var sum=r+qL+v+w;
 	var coefficient_array = [
 		write_latency*w/sum,
-		read_latency*qS/sum,
 		read_latency*qL/sum,
 		read_latency*v/sum,
 		read_latency*r/sum,
@@ -1429,7 +1415,6 @@ function lsh_table_cost(){
 
 	var text_array = [
 		"Update",
-		"Short Range Lookup",
 		"Long Range Lookup",
 		"Existing Point Lookup",
 		"Zero-result Point Lookup",
@@ -1439,7 +1424,6 @@ function lsh_table_cost(){
 
 	var id_suffix_array = [
 		"_write",
-		"_short_range_lookup",
 		"_long_range_lookup",
 		"_existing_point_lookup",
 		"_zero_result_lookup",
@@ -1447,7 +1431,7 @@ function lsh_table_cost(){
 	]
 	prefix = "lsh_table";
 	var total_cost = 0;
-	for(j=0;j <= 5;j++){
+	for(j=0;j <= 4;j++){
 		var div_tmp = document.getElementById(prefix+id_suffix_array[j]);
 		removeAllChildren(div_tmp);
 		div_tmp.setAttribute("style",style_array[j])
@@ -3175,4 +3159,14 @@ function showDataset(){
 function hideDataset(){
 	document.getElementById('dataset-trigger').onclick=function(){showDataset();}
 	document.getElementById("dataset-setting").style.display='none';
+}
+
+function showWorkload(){
+	document.getElementById('workload-trigger').onclick=function(){hideWorkload();}
+	document.getElementById("workload-setting").style.display='';
+}
+
+function hideWorkload(){
+	document.getElementById('workload-trigger').onclick=function(){showWorkload();}
+	document.getElementById("workload-setting").style.display='none';
 }

@@ -86,7 +86,6 @@ function re_run(e) {
     var r=parseFloat(document.getElementById("r").value);
     var v=parseFloat(document.getElementById("v").value);
     var qL=parseFloat(document.getElementById("qL").value);
-    var qS=parseFloat(document.getElementById("qS").value);
 
     if(event.target.id == "Key-Size"){
       var key_size = document.getElementById("Key-Size").value;
@@ -214,11 +213,9 @@ function re_run(e) {
 
 
     var lsm_bush_type = getRadioValueByName("lsm_bush_type");
+    re_run_now();
 
     update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E);
-
-
-    timer=setTimeout(re_run_now,250);
 
 }
 
@@ -238,7 +235,6 @@ function re_run_now() {
     var r=inputParameters.r;
     var v=inputParameters.v;
     var qL=inputParameters.qL;
-    var qS=inputParameters.qS;
 
     if (!isNaN(N))
         document.getElementById("N").value=numberWithCommas(N);
@@ -250,37 +246,46 @@ function re_run_now() {
         document.getElementById("read-latency").value=read_latency;
     if (!isNaN(write_latency))
         document.getElementById("write-latency").value=write_latency;
-    if (!isNaN(s))
-        document.getElementById("s").value=s;
+    if (!isNaN(s)){
+      document.getElementById("s").value=s;
+    }else{
+      document.getElementById("s").value=8192;
+    }
+
     if (!isNaN(w)){
       document.getElementById("w").value=w;
     }else{
       document.getElementById("w").value=1;
+      w = 1;
     }
 
     if (!isNaN(r)){
       document.getElementById("r").value=r;
     }else{
       document.getElementById("r").value=1;
+      r = 1;
     }
 
     if (!isNaN(v)){
       document.getElementById("v").value=v;
     }else{
       document.getElementById("v").value=1;
+      v = 1;
     }
 
     if (!isNaN(qL)){
       document.getElementById("qL").value=qL;
     }else{
       document.getElementById("qL").value=1;
+      qL = 1;
     }
 
-    if (!isNaN(qS)){
-      document.getElementById("qS").value=qS;
-    }else{
-      document.getElementById("qS").value=1;
-    }
+    var sum = qL+r+v+w;
+    document.getElementById("write-prop-text").textContent =String(w/sum*100).replace(/^(.*\..{6}).*$/,"$1");
+    document.getElementById("point-lookup-prop-text").textContent=String((v+r)/sum*100).replace(/^(.*\..{6}).*$/,"$1");
+    document.getElementById("range-lookup-prop-text").textContent=String(qL/sum*100).replace(/^(.*\..{6}).*$/,"$1");
+    document.getElementById("range-lookup-target-size-text").textContent = s;
+
 
 
     if(N >= Number.MAX_SAFE_INTEGER){

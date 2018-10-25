@@ -312,54 +312,60 @@
                   </div>
                 </div>
                 <br>
-            </div>
 
-
-            <br>
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                <h4 style="text-align: center">Workload</h4>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <div class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="The number of unique entries in the target key range" data-tooltip-position="bottom">1. Entries of Long Range Query </span></span>
-                    <input id="s" type="number" class="form-control" aria-label="Proportion" placeholder=" s (e.g., 2048)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
+                <p>
+                  The workload consists of <span id="write-prop-text">50</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries. To customize the workload, click <span id="workload-trigger" style="text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
+                </p>
+                <div id="workload-setting" class="row" style="display:none">
+                  <div class="row">
+                    <h4 style="text-align: center">Workload</h4>
                   </div>
-                  <br>
-                  <div class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="Proportion of Update Operation" data-tooltip-position="bottom">2. Proportion of Update Operation </span></span>
-                    <input id="w" type="text" class="form-control" aria-label="proportion of update operation" placeholder=" w (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
-                  </div>
-                  <br>
-                  <div class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="Proportion of Long Range Lookup Operation" data-tooltip-position="bottom">3. Proportion of Long Range Lookup Operation </span></span>
-                    <input id="qL" type="text" class="form-control" aria-label="proportion of long range lookup operation" placeholder=" qL (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
-                  </div>
-                  <br>
-                </div>
-
-
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <div class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="Proportion of Non-result Point Lookup Operation" data-tooltip-position="bottom">4. Proportion of Non-result Point Lookup Operation </span></span>
-                    <input id="r" type="text" class="form-control" aria-label="proportion of non-result point lookup operation" placeholder=" r (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
-                  </div>
-                    <br>
-                    <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="Proportion of Existig Point Lookup Operation" data-tooltip-position="bottom">5. Proportion of Existig Point Lookup Operation </span></span>
-                      <input id="v" type="text" class="form-control" aria-label="proportion of existing point lookup operation" placeholder=" v (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center"> Write</div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span data-tooltip="Proportion of Write" data-tooltip-position="bottom"> Proportion of Write </span></span>
+                        <input id="w" type="text" class="form-control" aria-label="proportion of write operation" placeholder=" w (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                      </div>
                     </div>
-                    <br>
-                    <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="Proportion of Short Range Lookup Operation" data-tooltip-position="bottom">6. Proportion of Short Range Lookup Operation </span></span>
-                      <input id="qS" type="text" class="form-control" aria-label="proportion of short range lookup operation" placeholder=" qS (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center"> Range Lookup </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span data-tooltip="Proportion of Range Lookup Operation" data-tooltip-position="bottom"> Proportion of  Range Lookup  </span></span>
+                        <input id="qL" type="text" class="form-control" aria-label="proportion of range lookup operation" placeholder=" qL (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                      </div>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span data-tooltip="The number of unique entries in the target key range" data-tooltip-position="bottom"> Target Range Size </span></span>
+                        <input id="s" type="number" class="form-control" aria-label="Proportion" placeholder=" s (e.g., 2048)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center"> Point Lookup </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span data-tooltip="Proportion of Existig Point Lookup Operation" data-tooltip-position="bottom"> Proportion of Existig Point Lookup </span></span>
+                        <input id="v" type="text" class="form-control" aria-label="proportion of existing point lookup operation" placeholder=" v (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span data-tooltip="Proportion of Non-result Point Lookup Operation" data-tooltip-position="bottom"> Proportion of Non-result Point Lookup </span></span>
+                        <input id="r" type="text" class="form-control" aria-label="proportion of non-result point lookup operation" placeholder=" r (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <br>
 
             </div>
+
+
             <br>
 
             <!-- Configuration for each architecture -->
@@ -535,17 +541,8 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
-                    <span data-tooltip="Short-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Short-range Lookup</p>
-                    </span>
-                  </div>
-                  <div id="lsh_table_short_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Long-range Lookup</p>
+                      <p style="text-align: center;font-size:15px">Range Lookup</p>
                     </span>
                   </div>
                   <div id="lsh_table_long_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
@@ -603,17 +600,8 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
-                    <span data-tooltip="Short-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Short-range Lookup</p>
-                    </span>
-                  </div>
-                  <div id="lsm_bush_short_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Long-range Lookup</p>
+                      <p style="text-align: center;font-size:15px">Range Lookup</p>
                     </span>
                   </div>
                   <div id="lsm_bush_long_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
@@ -670,17 +658,8 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
-                    <span data-tooltip="Short-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Short-range Lookup</p>
-                    </span>
-                  </div>
-                  <div id="lsm_tree_short_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Long-range Lookup</p>
+                      <p style="text-align: center;font-size:15px">Range Lookup</p>
                     </span>
                   </div>
                   <div id="lsm_tree_long_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">

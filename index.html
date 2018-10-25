@@ -249,7 +249,7 @@
                 </p>
                 <br>
                 <p>
-                The default dataset consists of 1 TB of data comprising 16 byte key-value pairs of which the key comprises 8 bytes. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
+                The default dataset consists of 1 TB of data comprising 16 byte key-value pairs of which the key comprises 8 bytes. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="cursor:pointer;text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
                 </p>
                 <div id="dataset-setting" class="row" style="display:none">
                   <div class="row">
@@ -262,7 +262,7 @@
                     <div class="col-sm-4">
                       <div class="input-group" >
                         <span class="input-group-addon"><span data-tooltip="Number of Entries in the Index (e.g., 10485760), which automatically changes the Level number" data-tooltip-position="bottom"> # Entries</span></span>
-                        <input id="N" type="text" class="form-control" aria-label="Index Size N (elements)" placeholder="Number of Entries in the Index (e.g., 10485760)" style="text-align:right" onkeyup="re_run(event, 'input1')"/>
+                        <input id="N" type="text" class="form-control" aria-label="Index Size N (elements)" placeholder="Number of Entries in the Index (e.g., 10485760)" style="text-align:right" onchange="re_run(event, 'input1')"/>
                       </div>
                     </div>
                     <div class="col-sm-4">
@@ -282,7 +282,7 @@
 
                 <br>
                 <p>
-                  The storage device is an SSD with 4 Kb blocks and for which reading a block takes 20 microseconds and writing a block takes 100 microseconds. To edit the SSD default settings, click <span data-tooltip="click here to edit the SSD default settings" data-tooltip-position="bottom" id="storage-device-trigger" style="text-decoration:underline;" onclick="showStorageDevice()"><b>here</b></span>.
+                  The storage device is an SSD with 4 Kb blocks and for which reading a block takes 20 microseconds and writing a block takes 100 microseconds. To edit the SSD default settings, click <span data-tooltip="click here to edit the SSD default settings" data-tooltip-position="bottom" id="storage-device-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showStorageDevice()"><b>here</b></span>.
                 </p>
                 <div id="storage-device-setting" class="row" style="display:none">
                   <div class="row">
@@ -314,8 +314,8 @@
                 <br>
 
                 <p>
-                  The workload consists of <span id="write-prop-text">50</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries.
-                  To customize the workload, click <span data-tooltip="click here to customize the workload" data-tooltip-position="bottom" id="workload-trigger" style="text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
+                  The workload consists of <span id="write-prop-text">50.0000</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries.
+                  To customize the workload, click <span data-tooltip="click here to customize the workload" data-tooltip-position="bottom" id="workload-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
                 </p>
                 <div id="workload-setting" class="row" style="display:none">
                   <div class="row">
@@ -392,7 +392,7 @@
 
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
-                      <input id="lsh_table_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" onkeyup="re_run(event, 'input4')"/>
+                      <input id="lsh_table_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
                     </div>
 
 
@@ -419,7 +419,7 @@
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
-                      <input id="lsm_bush_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onkeyup="re_run(event, 'input2')" />
+                      <input id="lsm_bush_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" />
                     </div>
 
                     <br>
@@ -485,7 +485,7 @@
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
-                      <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onkeyup="re_run(event, 'input2')" />
+                      <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" />
                     </div>
                     <br>
                     <div class="input-group">
@@ -496,17 +496,17 @@
                     <br>
                     <div class="input-group">
                     <span class="input-group-addon"><span data-tooltip="bits per entry (e.g., 10)." data-tooltip-position="bottom"> Bloom filters' bits per entry</span></span>
-                      <input id="lsm_tree_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right" onkeyup="re_run(event, 'input3')"/>
+                      <input id="lsm_tree_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right"/>
                     </div>
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
-                      <input id="lsm_tree_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" onkeyup="re_run(event, 'input4')"/>
+                      <input id="lsm_tree_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
                     </div>
                     <br>
                     <div id="lsm-tree/bush fence-pointer memory" class="input-group" style="display:none">
                     <span class="input-group-addon"><span data-tooltip="bits per key (e.g., 0.25)." data-tooltip-position="bottom"> Fence Pointers' bits per entry</span></span>
-                      <input id="lsm_tree_mfence_pointer_per_entry" readonly="true" type="text" class="form-control" aria-label="Fence Pointers' memory allocated to each entry (e.g., 0.25)" placeholder="The memory allocated for fence pointers" style="text-align:right" onkeyup="re_run(event, 'input3')"/>
+                      <input id="lsm_tree_mfence_pointer_per_entry" readonly="true" type="text" class="form-control" aria-label="Fence Pointers' memory allocated to each entry (e.g., 0.25)" placeholder="The memory allocated for fence pointers" style="text-align:right"/>
                     </div>
 
                     <!-- <br> -->

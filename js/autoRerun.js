@@ -281,9 +281,9 @@ function re_run_now() {
     }
 
     var sum = qL+r+v+w;
-    document.getElementById("write-prop-text").textContent =String(w/sum*100).replace(/^(.*\..{6}).*$/,"$1");
-    document.getElementById("point-lookup-prop-text").textContent=String((v+r)/sum*100).replace(/^(.*\..{6}).*$/,"$1");
-    document.getElementById("range-lookup-prop-text").textContent=String(qL/sum*100).replace(/^(.*\..{6}).*$/,"$1");
+    document.getElementById("write-prop-text").textContent =(w/sum*100).toFixed(4);
+    document.getElementById("point-lookup-prop-text").textContent=((v+r)/sum*100).toFixed(4);
+    document.getElementById("range-lookup-prop-text").textContent=(qL/sum*100).toFixed(4);
     document.getElementById("range-lookup-target-size-text").textContent = s;
 
 

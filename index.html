@@ -365,7 +365,8 @@
 
             </div>
 
-
+            <br>
+            <br>
             <br>
 
             <!-- Configuration for each architecture -->
@@ -531,7 +532,7 @@
               <!-- LSH-Table Cost -->
               <div id="lsh_table_cost" class="col-lg-4 col-md-4 col-sm-4">
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <div class="col-lg-6 col-md-6 col-sm-6" style="">
                     <span data-tooltip="update" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Write</p>
                     </span>
@@ -540,7 +541,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <div class="col-lg-6 col-md-6 col-sm-6" style="">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Range Lookup</p>
                     </span>
@@ -549,7 +550,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <div class="col-lg-6 col-md-6 col-sm-6" style="">
                     <span data-tooltip="Existing-point lookup" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Existing-point Lookup</p>
                     </span>
@@ -558,7 +559,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <div class="col-lg-6 col-md-6 col-sm-6" style="">
                     <span data-tooltip="Zero-result lookup" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Zero-result Lookup</p>
                     </span>
@@ -567,7 +568,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <div class="col-lg-6 col-md-6 col-sm-6" style="">
                     <span data-tooltip="Required Memory of the In-memory Hash Table " data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Memory</p>
                     </span>
@@ -576,7 +577,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <div class="col-lg-6 col-md-6 col-sm-6" style="">
                     <span data-tooltip="Throughput (ops/second)" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Throughput</p>
                     </span>
@@ -590,57 +591,57 @@
               <!-- LSM-Bush Cost -->
               <div id="lsm_bush_cost" class="col-lg-4 col-md-4 col-sm-4">
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="update" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Write</p>
                     </span>
-                  </div>
-                  <div id="lsm_bush_write" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_bush_write" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Range Lookup</p>
                     </span>
-                  </div>
-                  <div id="lsm_bush_long_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_bush_long_range_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="The worst-case point lookup cost to an existing entry occurs when the target key is to the oldest run at the largest level. The expected I/O cost is one I/O to this target run plus the sum of FPRs across all other runs" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Existing-point Lookup</p>
                     </span>
-                  </div>
-                  <div id="lsm_bush_existing_point_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_bush_existing_point_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="The cost of zero-result point lookups can be modeled as the sum of false positive rates across every run's Bloom filters" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Zero-result Lookup</p>
                     </span>
-                  </div>
-                  <div id="lsm_bush_zero_result_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_bush_zero_result_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Required Memory for Fence Pointers and Bloom Filters " data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Memory</p>
                     </span>
-                  </div>
-                  <div id="lsm_bush_memory" class="col-lg-6 col-md-6 col-sm-6">
+                  </div> -->
+                  <div id="lsm_bush_memory" class="col-lg-12 col-md-12 col-sm-12">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Throughput (ops/second)" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Throughput</p>
                     </span>
-                  </div>
-                  <div id="lsm_bush_throughput" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_bush_throughput" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
               </div>
@@ -648,57 +649,57 @@
               <!-- LSM-Tree Cost -->
               <div id="lsm_tree_cost" class="col-lg-4 col-md-4 col-sm-4">
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="update" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Write</p>
                     </span>
-                  </div>
-                  <div id="lsm_tree_write" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_tree_write" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Range Lookup</p>
                     </span>
-                  </div>
-                  <div id="lsm_tree_long_range_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_tree_long_range_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="The worst-case point lookup cost to an existing entry occurs when the target key is to the oldest run at the largest level. The expected I/O cost is one I/O to this target run plus the sum of FPRs across all other runs" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Existing-point Lookup</p>
                     </span>
-                  </div>
-                  <div id="lsm_tree_existing_point_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_tree_existing_point_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="The cost of zero-result point lookups can be modeled as the sum of false positive rates across every run's Bloom filters" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Zero-result Lookup</p>
                     </span>
-                  </div>
-                  <div id="lsm_tree_zero_result_lookup" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_tree_zero_result_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Required Memory for Fence Pointers and Bloom Filters " data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Memory</p>
                     </span>
-                  </div>
-                  <div id="lsm_tree_memory" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_tree_memory" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
                     <span data-tooltip="Throughput (ops/second)" data-tooltip-position="bottom">
                       <p style="text-align: center;font-size:15px">Throughput</p>
                     </span>
-                  </div>
-                  <div id="lsm_tree_throughput" class="col-lg-6 col-md-6 col-sm-6" style="text-align:center">
+                  </div> -->
+                  <div id="lsm_tree_throughput" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
                   </div>
                 </div>
               </div>

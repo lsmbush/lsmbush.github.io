@@ -1330,8 +1330,9 @@ function draw_lsm_graph(prefix) {
 			}
 
 			var message;
-			if(j != 5){
+			if(j != 4){
 				message = "The total cost of " +text_array[j]+ " is " + 	msg_cost + " I/O(s)."
+				cost += " I/O"
 			}else{
 				message = "The total cost of " +text_array[j]+ " is "  + formatBytes(msg_cost/8,1) + ".";
 				cost = formatBytes(msg_cost/8,1);
@@ -1351,10 +1352,10 @@ function draw_lsm_graph(prefix) {
 		var omega=1e-6;
 		var throughput = 1/total_cost/omega;
 		if(throughput > Math.pow(10, 8)){
-					message=throughput.toExponential(2);
+					message=throughput.toExponential(2) + " ops/s";
 					message2="Under the specified workload, the throughout is " + throughput.toExponential(6) + " ops/second"
 		}else{
-					message= throughput.toFixed(1);
+					message= throughput.toFixed(1) + " ops/s";
 					message2="Under the specified workload, the throughout is " + throughput.toFixed(6) + " ops/second"
 		}
 		var div_throughput = document.getElementById(prefix+"_throughput");
@@ -1460,8 +1461,9 @@ function lsh_table_cost(){
 		}
 
 
-		if(j != 5){
+		if(j != 4){
 			message = text_array[j] + " at this level has " + msg_cost + " I/O cost(s)."
+			cost += " I/O";
 		}else{
 			message = text_array[j] + " of LSH-Table is " + formatBytes(msg_cost/8,1) + ".";
 			cost = formatBytes(msg_cost/8,1);
@@ -1474,17 +1476,17 @@ function lsh_table_cost(){
 		span_tmp.setAttribute("data-tooltip",message);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
 		p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-		p_tmp.textContent=(cost+"")
+		p_tmp.textContent=cost
 		span_tmp.appendChild(p_tmp);
 		div_tmp.appendChild(span_tmp);
 		}
 		var omega=1e-6;
 		var throughput = 1/total_cost/omega;
 		if(throughput > Math.pow(10, 8)){
-					message=throughput.toExponential(2);
+					message=throughput.toExponential(2) + " ops/s";
 					message2="Under the specified workload, the throughout is " + throughput.toExponential(6) + " ops/second"
 		}else{
-					message= throughput.toFixed(1);
+					message= throughput.toFixed(1) + " ops/s";
 					message2="Under the specified workload, the throughout is " + throughput.toFixed(6) + " ops/second"
 		}
 		var div_throughput = document.getElementById(prefix+"_throughput");
@@ -1498,496 +1500,6 @@ function lsh_table_cost(){
 		span_tmp.appendChild(p_tmp);
 		div_throughput.appendChild(span_tmp)
 
-}
-
-function breakdown(){
-	var first_col_alignment="center";
-//titles
-	var div_new_row=document.createElement("div");
-	div_new_row.setAttribute("class","row");
-	var div_level = document.createElement("div");
-	div_level.setAttribute("class","col-sm-1");
-	div_level.setAttribute("style","width:5.333%");
-	var p=document.createElement("p");
-	p.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-	p.textContent=("Level")
-	div_level.appendChild(p);
-	var div_schema = document.createElement("div");
-	div_schema.setAttribute("class","col-sm-6");
-	div_schema.setAttribute("style","width:51%");
-	var div_schema_row = document.createElement("div");
-	div_schema_row.setAttribute("class","row");
-	var div_title_col2=document.createElement("div");
-	div_title_col2.setAttribute("class","col-sm-5")
-	var lsm_header2=document.createElement("h5");
-	lsm_header2.textContent="Entries per Level";
-	lsm_header2.setAttribute("style","text-align: center;")
-div_title_col2.appendChild(lsm_header2);
-	div_new_row.appendChild(div_level);
-	div_new_row.appendChild(div_schema);
-	div_schema.appendChild(div_schema_row);
-	div_new_row.appendChild(div_title_col2);
-
-
-	var div_col_tmp=document.createElement("div");
-	div_col_tmp.setAttribute("class","col-sm-4");
-	var p=document.createElement("p");
-	p.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-	p.textContent=("Point Lookup")
-	div_col_tmp.appendChild(p);
-	div_schema_row.appendChild(div_col_tmp);
-
-	var div_col_tmp=document.createElement("div");
-	div_col_tmp.setAttribute("class","col-sm-4")
-	var p=document.createElement("p");
-	p.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-	p.textContent=("Range Lookup")
-	div_col_tmp.appendChild(p);
-	div_schema_row.appendChild(div_col_tmp);
-
-	var div_col_tmp=document.createElement("div");
-	div_col_tmp.setAttribute("class","col-sm-2")
-	div_col_tmp.setAttribute("style","width:13.33%")
-	var p=document.createElement("p");
-	var span = document.createElement("span");
-	var msg = "In the worst case, an entry participates in O(T/K) merge operations within an active run across each of Levels 1 to L-1, " +
-	"and in O(T/Z) merge operations within the active run at Level L"
-	span.setAttribute("data-tooltip",msg);
-	span.setAttribute("data-tooltip-position","bottom")
-	p.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-	p.textContent=("Update")
-	span.appendChild(p);
-	div_col_tmp.appendChild(span);
-	div_schema_row.appendChild(div_col_tmp);
-
-	//Space Amp
-	var div_col_tmp=document.createElement("div");
-	div_col_tmp.setAttribute("class","col-sm-2")
-	div_col_tmp.setAttribute("style","width:20%")
-	var span = document.createElement("span");
-	var msg = "In the worst case, every entry at Levels 1 to L-1 is an update to an existing entry at Level L. " +
-	"Since the fraction of entries at Levels 1 to L-1 is 1/T of the overall number of entries, and at Level L, at most Z-1 of the runs " +
-	"may be completely filled with obsolete entries. The space-amplification can be modeled as Z - 1 + 1/T"
-	span.setAttribute("data-tooltip",msg);
-	span.setAttribute("data-tooltip-position","bottom")
-	var p=document.createElement("p");
-	p.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-	p.textContent=("Space-Amp")
-	span.appendChild(p);
-	div_col_tmp.appendChild(span);
-	div_schema_row.appendChild(div_col_tmp);
-
-	var div_col_tmp=document.createElement("div");
-	div_col_tmp.setAttribute("class","col-sm-2")
-	div_col_tmp.setAttribute("style","width:20%")
-	var span = document.createElement("span");
-	var msg = "Allocated memory for fence pointers and bloom filters (bits). ";
-	if(lsh_table_flag){
-		msg = "Memory for LSH-Table (bits)."
-	}
-	span.setAttribute("data-tooltip",msg);
-	span.setAttribute("data-tooltip-position","bottom")
-	var p=document.createElement("p");
-	p.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-	p.textContent=("Memory")
-	span.appendChild(p);
-	div_col_tmp.appendChild(span);
-	div_schema_row.appendChild(div_col_tmp);
-
-
-		var second_text_array = [
-			"Non-result",
-			"Existing",
-			"Short",
-			"Long",
-			"",
-			""
-		]
-		var second_msg_array = [
-			"The cost of non-result point lookups can be modeled as the sum of false positive rates across every run's Bloom filters",
-			"The worst-case point lookup cost to an existing entry occurs when the target key is to the oldest run at the largest level. The expected I/O cost is one I/O to this target run plus the sum of FPRs across all other runs",
-			"A short range lookup issues at most K I/Os per level to the smaller L-1 Levels and at most Z I/Os to the largest level for a total of Z+K*(L-1) random I/Os",
-			"A long range lookup continues with a sequential scan to the relevant key range at each run issuing at least s/B sequential I/Os. The number of sequential I/Os is amplified by (1+1/T) for updated entries at Levels 1 to L-1 and Z for updated entries at Level L.",
-			"",
-			""
-		]
-
-		var class_array = [
-			"col-sm-2",
-			"col-sm-2",
-			"col-sm-2",
-			"col-sm-2",
-			"col-sm-2",
-			"col-sm-2"
-		]
-		var style_array= [
-			"width:20%",
-			"width:13.333%",
-			"",
-			"",
-			"width:13.33%",
-			"width:20%",
-		]
-		var text_array = [
-			"Zero-result Point Lookup",
-			"Existing Point Lookup",
-			"Short Range Lookup",
-			"Long Range Lookup",
-			"Update",
-			//"Space Amplification"
-			"Memory"
-		]
-		var sum=r+qL+qS+v+w;
-		var coefficient_array = [
-			r/sum,
-			v/sum,
-			qS/sum,
-			qL/sum,
-			w/sum,
-			0
-		]
-		var leveled_function_array = [
-			getLeveledNonExistingPointLookupCost,
-			getLeveledExistingPointLookupCost,
-			getLeveledShortRangeLookupCost,
-			getLeveledLongRangeLookupCost,
-			getLeveledUpdateCost,
-			getLeveledMemory
-			//getLeveledSpaceAmp
-		]
-		var total_function_array = [
-			getTotalNonExistingPointLookupCost,
-			getTotalExistingPointLookupCost,
-			getTotalShortRangeLookupCost,
-			getTotalLongRangeLookupCost,
-			getTotalUpdateCost,
-			getTotalMemory
-			//getTotalSpaceAmp
-		]
-
-result_div.appendChild(div_new_row);
-
-var div_new_row=document.createElement("div");
-div_new_row.setAttribute("class","row")
-var div_level = document.createElement("div");
-div_level.setAttribute("class","col-sm-1");
-div_level.setAttribute("style","width:5.33%");
-div_new_row.append(div_level);
-
-var div_col2 = document.createElement("div");
-div_col2.setAttribute("class","col-sm-6");
-div_col2.setAttribute("style","width:51%");
-var div_col2_row = document.createElement("div");
-div_col2_row.setAttribute("class","row");
-div_col2.append(div_col2_row);
-div_new_row.append(div_col2);
-
-for(i=0;i <= 5;i++){
-	var div_col_tmp=document.createElement("div");
-	div_col_tmp.setAttribute("class",class_array[i]);
-	div_col_tmp.setAttribute("style",style_array[i]);
-	var span = document.createElement("span");
-	if(second_msg_array[i] != ""){
-		span.setAttribute("data-tooltip",second_msg_array[i]);
-		span.setAttribute("data-tooltip-position","bottom")
-	}
-
-	var p = document.createElement("p");
-	p.setAttribute("style","text-align: center;font-size:15px")
-	p.textContent=(second_text_array[i])
-	span.appendChild(p)
-	div_col_tmp.appendChild(span);
-	div_col2_row.appendChild(div_col_tmp);
-}
-result_div.appendChild(div_new_row);
-
-	if(!lsh_table_flag){
-
-		if (N<=(mbuffer/E))
-		{
-			//nothing in LSM tree
-//adding the buffer row
-		var div_new_row=document.createElement("div");
-		div_new_row.setAttribute("class","row");;
-		var div_level = document.createElement("div");
-		div_level.setAttribute("class","col-sm-1");
-		div_level.setAttribute("style","width:5.33%");
-		var p=document.createElement("p");
-		p.setAttribute("style","text-align: center;font-size:15px")
-		p.textContent=("Buffer")
-		div_level.appendChild(p);
-		var div_col2 = document.createElement("div");
-		div_col2.setAttribute("class", "col-sm-6");
-		div_col2.setAttribute("style","width:51%");
-		var div_col2_row = document.createElement("div");
-		div_col2_row.setAttribute("class","row");
-		div_col2.appendChild(div_col2_row);
-
-		for(i=0;i<=5;i++){
-			var div_col_tmp=document.createElement("div");
-			div_col_tmp.setAttribute("class",class_array[i])
-			div_col_tmp.setAttribute("style",style_array[i])
-			var p_tmp=document.createElement("p");
-			p_tmp.setAttribute("style","text-align: center;font-size:15px")
-			p_tmp.textContent=("-");
-			div_col_tmp.appendChild(p_tmp);
-			div_col2_row.appendChild(div_col_tmp);
-		}
-
-				var div_col3=document.createElement("div");
-				div_col3.setAttribute("class","col-sm-5")
-				div_col3.setAttribute("style","text-align: center;")
-				var p4=document.createElement("p");
-				p4.setAttribute("style","text-align: center;")
-				p4.textContent=("All data entries fit into the buffer")
-				var p4b=document.createElement("p");
-				p4b.setAttribute("style","text-align: center;")
-				p4b.textContent=("Add more entries to see a tree!")
-
-				div_col3.appendChild(p4);
-				div_col3.appendChild(p4b);
-
-				div_new_row.appendChild(div_level);
-				div_new_row.appendChild(div_col2);
-				div_new_row.appendChild(div_col3);
-
-		result_div.appendChild(div_new_row);
-
-
-			var hr=document.createElement("hr");
-			result_div.appendChild(hr)
-
-		}else{
-
-		var last_is_smaller=false;
-		var full_runs_in_last_level=0;
-		var L = filters.length;
-		var previous_entries=mbuffer/E;
-
-			for (var i=0;i<L;i++)
-			{
-				if(leveltier >= 4){
-					K = Math.floor(Math.pow(LLBushT, Math.pow(2, L - i - 2)));
-					Z = 1;
-				}
-
-				var div_new_row=document.createElement("div");
-				div_new_row.setAttribute("class","row");
-
-				var div_level = document.createElement("div");
-				div_level.setAttribute("class","col-sm-1");
-				div_level.setAttribute("style","width:5.33%");
-				var p=document.createElement("p");
-				p.setAttribute("style","text-align: center;font-size:15px")
-				var span=document.createElement("span");
-				var MSD=getMostSignificantDigit(filters[i].fp);
-						if (MSD>10)
-							MSD=10;
-				var bits_per_element = 0;
-				if(filters[i].nokeys != 0){
-					bits_per_element = (filters[i].mem/filters[i].nokeys).toFixed(2);
-				}
-				message ="";
-				if(leveltier >= 4){
-					var tmp_previous_entries = previous_entries;
-					if(i < L - 1){
-						previous_entries *= Math.pow(LLBushT, Math.pow(2, L - 2 - i));
-					}else{
-						previous_entries *= LLBushK;
-					}
-					message  = "The capacity of this level is " + numberWithCommas(Math.round(previous_entries)) + " entries."
-				}else{
-					var tmp_previous_entrie;
-					previous_entries *= T;
-					if(i < L - 1){
-						tmp_previous_entries = previous_entries/K;
-					}else{
-						tmp_previous_entries = previous_entries/Z;
-					}
-
-					message  = "The capacity of this level is " + numberWithCommas(Math.round(previous_entries)) + " entries."
-				}
-				message+=" The false positive rate for Bloom filters at Level "+(i+1)+
-				" is "+(filters[i].fp*100).toFixed(MSD+1)+"%. This entails "+bits_per_element+
-				" bits-per-element, resulting in a total of "+formatBytes(filters[i].mem/8,1)+" for Bloom filters at this level out of "+formatBytes(mfilter_bits/8)+" for Bloom filters across all levels."
-				span.setAttribute("data-tooltip",message);
-				span.setAttribute("data-tooltip-position","bottom")
-				span.textContent=(i+1+"");
-				p.appendChild(span);
-				div_level.appendChild(p);
-
-				var div_col2 = document.createElement("div");
-				div_col2.setAttribute("class", "col-sm-6");
-				div_col2.setAttribute("style","width:51%");
-				var div_col2_row = document.createElement("div");
-				div_col2_row.setAttribute("class","row");
-				div_col2.appendChild(div_col2_row);
-
-				for(j=0;j <= 5;j++){
-					var div_col2_tmp=document.createElement("div");
-					div_col2_tmp.setAttribute("class",class_array[j]);
-					div_col2_tmp.setAttribute("style",style_array[j])
-					var p2_tmp=document.createElement("p");
-					var span2_tmp=document.createElement("span");
-
-					var cost = leveled_function_array[j](i+1, mbuffer/E, L, filters, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
-					var threshold_flag=false;
-					var message;
-					var msg_cost = cost;
-					if(cost*1000%1 != 0){
-						msg_cost=cost.toExponential(5);
-					}
-					if(j != 5){
-						message = text_array[j] + " at this level has " + msg_cost + " I/O cost(s)."
-					}else{
-						message = text_array[j] + " at this level is " + formatBytes(msg_cost/8,1) + "."
-					}
-					if(cost > 2000){
-						cost = cost.toExponential(3)
-					}else if(cost <= THRESHOLD){
-						if(cost != 0){
-							threshold_flag=true;
-						}
-						cost = 0.0;
-					}else if(typeof cost == 'number'  && cost*1000 < 1){
-						cost = myFloor(cost, 1).toExponential(1)
-					}else if(cost*1000%1 != 0){
-						cost = (Math.floor(cost*1000)/1000).toFixed(3)
-					}
-					if(threshold_flag){
-						message += "Because the value here is too small (less than 1e-9), it is noted as 0 in breakdown table. "
-					}
-
-					span2_tmp.setAttribute("data-tooltip",message);
-					span2_tmp.setAttribute("data-tooltip-position","bottom")
-					p2_tmp.setAttribute("style","text-align: center;font-size:15px")
-					p2_tmp.textContent=(cost+"")
-					span2_tmp.appendChild(p2_tmp);
-					div_col2_tmp.appendChild(span2_tmp);
-					div_col2_row.appendChild(div_col2_tmp);
-				}
-
-
-								div_new_row.appendChild(div_level);
-								div_new_row.appendChild(div_col2);
-								div_new_row.appendChild(div_col3);
-					result_div.appendChild(div_new_row);
-
-
-			}
-
-			var hr=document.createElement("hr");
-			result_div.appendChild(hr)
-
-
-			//total cost line
-			var div_new_row=document.createElement("div");
-			div_new_row.setAttribute("class","row")
-
-/*
-				var Rbaseline=eval_R(filters_baseline, leveltier, T);
-				var Rmonkey=eval_R(filters_monkey, leveltier, T);
-				var RfluidLSMTree;
-				if(leveltier == 3){
-					RfluidLSMTree = eval_R(filters_fluid_lsm_tree, leveltier, T, K, Z)
-				}
-*/
-				var div_col1 = document.createElement("div");
-				div_col1.setAttribute("class","col-sm-1")
-				div_col1.setAttribute("style","width:5.33%");
-			var p1=document.createElement("p");
-			p1.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-			p1.textContent=("Total:")
-			div_col1.appendChild(p1);
-
-
-					var div_col2=document.createElement("div");
-				div_col2.setAttribute("class","col-sm-6");
-				div_col2.setAttribute("style","width:51%");
-				var div_col2_row=document.createElement("div");
-				div_col2_row.setAttribute("class","row");
-				div_col2.appendChild(div_col2_row);
-
-				var total_cost=0;
-
-				for(j=0;j<=5;j++){
-					var div_col2_tmp=document.createElement("div");
-					div_col2_tmp.setAttribute("class",class_array[j]);
-					div_col2_tmp.setAttribute("style",style_array[j]);
-					var p2_tmp=document.createElement("p");
-					var span2_tmp=document.createElement("span");
-
-					var cost = total_function_array[j](i+1, mbuffer/E, L, filters, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
-					total_cost += coefficient_array[j]*cost;
-					var msg_cost = cost;
-					if(cost*1000%1 != 0){
-						msg_cost=cost.toExponential(5);
-					}
-					var message;
-					if(j != 5){
-						message = "The total cost of " +text_array[j]+ " is " + 	msg_cost + " I/O(s)."
-					}else{
-						message = "The total cost of " +text_array[j]+ " is "  + formatBytes(msg_cost/8,1) + "."
-					}
-					var threshold_flag=false;
-					if(cost > 2000){
-							cost = cost.toExponential(3);
-					}else if(cost <= THRESHOLD){
-						if(cost != 0){
-							threshold_flag=true;
-						}
-						cost = 0.0;
-					}else if(typeof cost == 'number'  && cost*1000 < 1){
-						cost = myCeil(cost, 1).toExponential(1)
-					}else if(cost*1000%1 != 0){
-						cost = (Math.ceil(cost*1000)/1000).toFixed(3)
-					}
-					if(threshold_flag){
-						message += "Because the value here is too small (less than 1e-9), it is noted as 0 in breakdown table. "
-					}
-					p2_tmp.textContent=(cost+"")
-					span2_tmp.setAttribute("data-tooltip",message);
-					span2_tmp.setAttribute("data-tooltip-position","bottom")
-					p2_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-					span2_tmp.appendChild(p2_tmp);
-					div_col2_tmp.appendChild(span2_tmp);
-					div_col2_row.appendChild(div_col2_tmp);
-				}
-
-
-					var div_col3=document.createElement("div");
-				div_col3.setAttribute("class","col-sm-5");
-				//div_col3.setAttribute("style","width:40%");
-				var p3_tmp=document.createElement("p");
-				var span3_tmp=document.createElement("span");
-				if(total_cost*1000%1 != 0){
-					message="Total cost under the specified workload is " + total_cost.toExponential(5) + " I/Os."
-				}else{
-					message="Total cost under the specified workload is " + total_cost + " I/Os."
-				}
-
-				message += " The total memory used for Bloom Filter is " + formatBytes(mfilter_bits/8) + " and the total storage is " + formatBytes((N+X)*E) + "."
-				p3_tmp.textContent=message;
-				span3_tmp.setAttribute("data-tooltip",message);
-				span3_tmp.setAttribute("data-tooltip-position","bottom")
-				p3_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
-				span3_tmp.appendChild(p3_tmp);
-				div_col3.appendChild(span3_tmp)
-				div_new_row.appendChild(div_col1);
-				div_new_row.appendChild(div_col2);
-				div_new_row.appendChild(div_col3);
-
-
-					/*if (leveltier==0)
-							message+=" TIERING: When a run is flushed to the next level it is NOT merged with the already existing runs (if any). Hence, every time a run is pushed to the next level it is written only once.";
-					else if (leveltier==1)
-							message+=" LEVELING: When a run is flushed to the next level it is ALWAYS merged with the already existing runs (if any). Hence, every flush causes (up to) size_ratio-1 merges in the next level.";
-						*/
-
-
-				result_div.appendChild(div_new_row);
-			}
-		}
 }
 
 function getHashTableCost(conf){

@@ -784,9 +784,9 @@ function eval_R(filters, leveltier, T, Y, K, Z, vflag=false, LLBushK, LLBushT)
 function reset_button_colors()
 {
 	var color='#777';
-    document.getElementById("scenario1").style.background=color;
-    document.getElementById("scenario2").style.background=color;
-    document.getElementById("scenario3").style.background=color;
+    //document.getElementById("scenario1").style.background=color;
+    //document.getElementById("scenario2").style.background=color;
+    //document.getElementById("scenario3").style.background=color;
 }
 
 function initScenario1(){
@@ -1345,7 +1345,12 @@ function draw_lsm_graph(prefix) {
 			p_tmp.textContent=(cost+"")
 			span_tmp.setAttribute("data-tooltip",message);
 			span_tmp.setAttribute("data-tooltip-position","bottom")
-			p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
+			if(j != 4){
+				p_tmp.setAttribute("style","text-align: center;font-size:15px")
+			}else{
+				p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold");
+			}
+
 			span_tmp.appendChild(p_tmp);
 			div_tmp.appendChild(span_tmp);
 		}
@@ -1475,7 +1480,12 @@ function lsh_table_cost(){
 
 		span_tmp.setAttribute("data-tooltip",message);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
-		p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
+		if(j != 4){
+			p_tmp.setAttribute("style","text-align: center;font-size:15px;")
+		}else{
+			p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold");
+		}
+
 		p_tmp.textContent=cost
 		span_tmp.appendChild(p_tmp);
 		div_tmp.appendChild(span_tmp);

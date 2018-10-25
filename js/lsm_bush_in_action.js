@@ -1346,9 +1346,9 @@ function draw_lsm_graph(prefix) {
 			span_tmp.setAttribute("data-tooltip",message);
 			span_tmp.setAttribute("data-tooltip-position","bottom")
 			if(j != 4){
-				p_tmp.setAttribute("style","text-align: center;font-size:15px")
+				p_tmp.setAttribute("style","text-align: center;")
 			}else{
-				p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold");
+				p_tmp.setAttribute("style","text-align: center;font-weight:bold");
 			}
 
 			span_tmp.appendChild(p_tmp);
@@ -1370,7 +1370,7 @@ function draw_lsm_graph(prefix) {
 		p_tmp.textContent = message;
 		span_tmp.setAttribute("data-tooltip",message2);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
-		p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
+		p_tmp.setAttribute("style","text-align: center;font-weight:bold")
 		span_tmp.appendChild(p_tmp);
 		div_throughput.appendChild(span_tmp);
 
@@ -1481,9 +1481,9 @@ function lsh_table_cost(){
 		span_tmp.setAttribute("data-tooltip",message);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
 		if(j != 4){
-			p_tmp.setAttribute("style","text-align: center;font-size:15px;")
+			p_tmp.setAttribute("style","text-align: center;")
 		}else{
-			p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold");
+			p_tmp.setAttribute("style","text-align: center;font-weight:bold");
 		}
 
 		p_tmp.textContent=cost
@@ -1506,7 +1506,7 @@ function lsh_table_cost(){
 		p_tmp.textContent = message;
 		span_tmp.setAttribute("data-tooltip",message2);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
-		p_tmp.setAttribute("style","text-align: center;font-size:15px;font-weight:bold")
+		p_tmp.setAttribute("style","text-align: center;font-weight:bold")
 		span_tmp.appendChild(p_tmp);
 		div_throughput.appendChild(span_tmp)
 
@@ -2663,32 +2663,38 @@ function MergeBy3LBush(){
 
 function showStorageDevice(){
 	document.getElementById('storage-device-trigger').onclick=function(){hideStorageDevice();}
+	document.getElementById('storage-device-trigger').setAttribute('data-tooltip','click here to hide the SSD default settings');
 	document.getElementById("storage-device-setting").style.display='';
 }
 
 function hideStorageDevice(){
 	document.getElementById('storage-device-trigger').onclick=function(){showStorageDevice();}
+	document.getElementById('storage-device-trigger').setAttribute('data-tooltip','click here to edit the SSD default settings');
 	document.getElementById("storage-device-setting").style.display='none';
 
 }
 
 function showDataset(){
 	document.getElementById('dataset-trigger').onclick=function(){hideDataset();}
+	document.getElementById('dataset-trigger').setAttribute('data-tooltip','click here to hide the default dataset');
 	document.getElementById("dataset-setting").style.display='';
 
 }
 
 function hideDataset(){
 	document.getElementById('dataset-trigger').onclick=function(){showDataset();}
+	document.getElementById('dataset-trigger').setAttribute('data-tooltip','click here to edit the default dataset');
 	document.getElementById("dataset-setting").style.display='none';
 }
 
 function showWorkload(){
 	document.getElementById('workload-trigger').onclick=function(){hideWorkload();}
+	document.getElementById('workload-trigger').setAttribute('data-tooltip','click here to hide the workload setting');
 	document.getElementById("workload-setting").style.display='';
 }
 
 function hideWorkload(){
 	document.getElementById('workload-trigger').onclick=function(){showWorkload();}
+	document.getElementById('workload-trigger').setAttribute('data-tooltip','click here to customize the workload');
 	document.getElementById("workload-setting").style.display='none';
 }

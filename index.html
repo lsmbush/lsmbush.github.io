@@ -249,7 +249,7 @@
                 </p>
                 <br>
                 <p>
-                The default dataset consists of 1 TB of data comprising 16 byte key-value pairs of which the key comprises 8 bytes. To edit the default dataset, click <span id="dataset-trigger" style="text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
+                The default dataset consists of 1 TB of data comprising 16 byte key-value pairs of which the key comprises 8 bytes. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
                 </p>
                 <div id="dataset-setting" class="row" style="display:none">
                   <div class="row">
@@ -282,7 +282,7 @@
 
                 <br>
                 <p>
-                  The storage device is an SSD with 4 Kb blocks and for which reading a block takes 20 microseconds and writing a block takes 100 microseconds. To edit the SSD default settings, click <span id="storage-device-trigger" style="text-decoration:underline;" onclick="showStorageDevice()"><b>here</b></span>.
+                  The storage device is an SSD with 4 Kb blocks and for which reading a block takes 20 microseconds and writing a block takes 100 microseconds. To edit the SSD default settings, click <span data-tooltip="click here to edit the SSD default settings" data-tooltip-position="bottom" id="storage-device-trigger" style="text-decoration:underline;" onclick="showStorageDevice()"><b>here</b></span>.
                 </p>
                 <div id="storage-device-setting" class="row" style="display:none">
                   <div class="row">
@@ -314,7 +314,8 @@
                 <br>
 
                 <p>
-                  The workload consists of <span id="write-prop-text">50</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries. To customize the workload, click <span id="workload-trigger" style="text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
+                  The workload consists of <span id="write-prop-text">50</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries.
+                  To customize the workload, click <span data-tooltip="click here to customize the workload" data-tooltip-position="bottom" id="workload-trigger" style="text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
                 </p>
                 <div id="workload-setting" class="row" style="display:none">
                   <div class="row">
@@ -383,14 +384,17 @@
                     </div>
                     <br>
                     <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
-                      <input id="lsh_table_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" onkeyup="re_run(event, 'input4')"/>
-                    </div>
-                    <br>
-                    <div class="input-group">
                     <span class="input-group-addon"><span data-tooltip="the percentage of obsolete entries to trigger LSH-Table's garbage collection (e.g., 0.5)." data-tooltip-position="bottom"> Garbage Collection Threshold </span></span>
                       <input id="lsh_table_gc_threshold" type="text" class="form-control" aria-label="threshold for garbage collection" placeholder="The threshold ratio in (0,1) for garbage collection (e.g., 0.5)" style="text-align:right" onchange="re_run(event, 'input4')"/>
                     </div>
+
+                    <br>
+
+                    <div class="input-group">
+                      <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
+                      <input id="lsh_table_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" onkeyup="re_run(event, 'input4')"/>
+                    </div>
+
 
                 </div>
                 <!-- LSM-Bush -->
@@ -405,38 +409,42 @@
                       <h4 style="text-align: center">LSM-Bush</h4>
                     </div>
                     <br>
-                    <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
-                      <input id="lsm_bush_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
-                    </div>
-                    <br>
-                    <div id="lsm-tree/bush memory" class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="bits per entry (e.g., 10)." data-tooltip-position="bottom"> Bloom filters' bits per entry</span></span>
-                      <input id="lsm_bush_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right" onchange="re_run(event, 'input3')"/>
-                    </div>
-                    <!-- <br> -->
-                    <div id="lsm-tree/bush fence-pointer memory" class="input-group" style="display:none">
-                    <span class="input-group-addon"><span data-tooltip="bits per key (e.g., 0.25)." data-tooltip-position="bottom"> Fence Pointers' bits per entry</span></span>
-                      <input id="lsm_bush_mfence_pointer_per_entry" readonly="true" type="text" class="form-control" aria-label="Fence Pointers' memory allocated to each entry (e.g., 0.25)" placeholder="The memory allocated for fence pointers" style="text-align:right" onchange="re_run(event, 'input3')"/>
-                    </div>
-                  <br>
                     <div id="LSM-Bush Merge Policy" class="input-group">
                     <span class="input-group-addon" style="text-align: left;"><span data-tooltip="With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
                       <span class="input-group-addon">3L-Bush &nbsp;<input id="3L-Bush" name="lsm_bush_type" type="radio" aria-label="3L-Bush" value="6" checked="false" onchange="MergeBy3LBush()"/></span>
                       <span class="input-group-addon">LSM-Bush &nbsp;<input id="LSM-Bush" name="lsm_bush_type" type="radio" aria-label="LSM-Bush" value="5" checked="false" onchange="MergeByLSMBush()"/></span>
                       <span class="input-group-addon">LL-Bush &nbsp;<input id="LL-Bush" name="lsm_bush_type" type="radio" aria-label="LL-Bush" value="4" checked="false" onchange="MergeByLLBush()"/></span>
                     </div>
+
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
                       <input id="lsm_bush_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onkeyup="re_run(event, 'input2')" />
                     </div>
+
                     <br>
                     <div id="input-group-LL-Bush-T" class="input-group">
                       <span class="input-group-addon"><span data-tooltip="Growth rate of the size ratio (e.g., 2)." data-tooltip-position="bottom"> LL-Bush T</span></span>
                       <input id="lsm_bush_T" type="text" class="form-control" aria-label="Size Ratio T" placeholder="growth rate of the size ratio (e.g., 2)" style="text-align:right" onchange="re_run(event, 'input8')" />
                       <!-- <span class="input-group-addon">(bytes)</span> -->
+                    </div>
 
+                    <br>
+                    <div id="lsm-tree/bush memory" class="input-group">
+                    <span class="input-group-addon"><span data-tooltip="bits per entry (e.g., 10)." data-tooltip-position="bottom"> Bloom filters' bits per entry</span></span>
+                      <input id="lsm_bush_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right" onchange="re_run(event, 'input3')"/>
+                    </div>
+
+                  <!-- <br> -->
+                  <div id="lsm-tree/bush fence-pointer memory" class="input-group" style="display:none">
+                  <span class="input-group-addon"><span data-tooltip="bits per key (e.g., 0.25)." data-tooltip-position="bottom"> Fence Pointers' bits per entry</span></span>
+                    <input id="lsm_bush_mfence_pointer_per_entry" readonly="true" type="text" class="form-control" aria-label="Fence Pointers' memory allocated to each entry (e.g., 0.25)" placeholder="The memory allocated for fence pointers" style="text-align:right" onchange="re_run(event, 'input3')"/>
+                  </div>
+
+                    <br>
+                    <div class="input-group">
+                      <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
+                      <input id="lsm_bush_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
                     </div>
 
                     <br>
@@ -460,28 +468,6 @@
                       <h4 style="text-align: center">LSM-Tree</h4>
                     </div>
                     <br>
-
-                    <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
-                      <input id="lsm_tree_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" onkeyup="re_run(event, 'input4')"/>
-                    </div>
-                    <br>
-                    <div class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="bits per entry (e.g., 10)." data-tooltip-position="bottom"> Bloom filters' bits per entry</span></span>
-                      <input id="lsm_tree_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right" onkeyup="re_run(event, 'input3')"/>
-                    </div>
-                    <br>
-                    <div id="lsm-tree/bush fence-pointer memory" class="input-group" style="display:none">
-                    <span class="input-group-addon"><span data-tooltip="bits per key (e.g., 0.25)." data-tooltip-position="bottom"> Fence Pointers' bits per entry</span></span>
-                      <input id="lsm_tree_mfence_pointer_per_entry" readonly="true" type="text" class="form-control" aria-label="Fence Pointers' memory allocated to each entry (e.g., 0.25)" placeholder="The memory allocated for fence pointers" style="text-align:right" onkeyup="re_run(event, 'input3')"/>
-                    </div>
-                    <div class="input-group">
-                      <span class="input-group-addon" style="text-align: left;"><span data-tooltip="False Positive Rate Allocation Policy" data-tooltip-position="bottom" > FPR Allocation </span></span>
-                      <span class="input-group-addon"><span data-tooltip="Distribute the memory evenly to each level" data-tooltip-position="bottom">Fixed &nbsp;<input id="fpr_policy" name="fpr_radio" type="radio" aria-label="fixed" value="0" onchange="re_run(event, 'input7')"></span></span>
-                      <span class="input-group-addon"><span data-tooltip="Distribute the memory to minimize the non-result point lookup cost" data-tooltip-position="bottom"> Optimal for No-result &nbsp;<input id="fpr_policy" name="fpr_radio" type="radio" aria-label="optimal for non-result" value="1" checked="true" onchange="re_run(event, 'input7')"></span></span>
-                    </div>
-                    <br>
-                    <!-- <br> -->
                     <div id="LSM-Tree Merge Policy" class="input-group">
                     <span class="input-group-addon" style="text-align: left;"><span data-tooltip="Merge Policies: With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs. For lazy leveling, the largest level has only one run while the rest levels have (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
                       <span class="input-group-addon">leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="level" value="1" checked="true" onchange="MergeNotyFliudLSMTree()"/></span>
@@ -490,17 +476,43 @@
                       <!-- <span class="input-group-addon">Fliud LSM-Tree&nbsp;<input id="leveltier" name="ltradio" type="radio" aria-label="Fliud LSM-Tree" value="3" checked="false" onchange="MergeByFliudLSMTree()"/></span> -->
                     </div>
                     <br>
-                    <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
-                      <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onkeyup="re_run(event, 'input2')" />
-                    </div>
-                    <br>
                     <div id="input-group-T" class="input-group">
                       <span class="input-group-addon"><span data-tooltip="Ratio between capacities of adjacent levels (e.g., 2.0)." data-tooltip-position="bottom"> Size ratio</span></span>
                       <input id="lsm_tree_T" type="text" class="form-control" aria-label="Size Ratio T" placeholder="Ratio between capacities of adjacent levels (e.g., 2.0)" style="text-align:right" onchange="re_run(event, 'input8')" />
                       <!-- <span class="input-group-addon">(bytes)</span> -->
 
                     </div>
+                    <br>
+                    <div class="input-group">
+                      <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
+                      <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onkeyup="re_run(event, 'input2')" />
+                    </div>
+                    <br>
+                    <div class="input-group">
+                      <span class="input-group-addon" style="text-align: left;"><span data-tooltip="False Positive Rate Allocation Policy" data-tooltip-position="bottom" > FPR Allocation </span></span>
+                      <span class="input-group-addon"><span data-tooltip="Distribute the memory evenly to each level" data-tooltip-position="bottom">Fixed &nbsp;<input id="fpr_policy" name="fpr_radio" type="radio" aria-label="fixed" value="0" onchange="re_run(event, 'input7')"></span></span>
+                      <span class="input-group-addon"><span data-tooltip="Distribute the memory to minimize the non-result point lookup cost" data-tooltip-position="bottom"> Optimal for No-result &nbsp;<input id="fpr_policy" name="fpr_radio" type="radio" aria-label="optimal for non-result" value="1" checked="true" onchange="re_run(event, 'input7')"></span></span>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                    <span class="input-group-addon"><span data-tooltip="bits per entry (e.g., 10)." data-tooltip-position="bottom"> Bloom filters' bits per entry</span></span>
+                      <input id="lsm_tree_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right" onkeyup="re_run(event, 'input3')"/>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                      <span class="input-group-addon"><span data-tooltip="Buffer Size in MB (e.g., 2)." data-tooltip-position="bottom"> Buffer size (MB)</span></span>
+                      <input id="lsm_tree_mbuffer" type="number" class="form-control" aria-label="Buffer Size Mbuffer (MB)" placeholder="Buffer Size in MB (e.g., 2)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" onkeyup="re_run(event, 'input4')"/>
+                    </div>
+                    <br>
+                    <div id="lsm-tree/bush fence-pointer memory" class="input-group" style="display:none">
+                    <span class="input-group-addon"><span data-tooltip="bits per key (e.g., 0.25)." data-tooltip-position="bottom"> Fence Pointers' bits per entry</span></span>
+                      <input id="lsm_tree_mfence_pointer_per_entry" readonly="true" type="text" class="form-control" aria-label="Fence Pointers' memory allocated to each entry (e.g., 0.25)" placeholder="The memory allocated for fence pointers" style="text-align:right" onkeyup="re_run(event, 'input3')"/>
+                    </div>
+
+                    <!-- <br> -->
+
+
+
 
 
                     <!-- <div id="input-group-Fluid-K" class="input-group" style="display: none">
@@ -541,57 +553,57 @@
               <!-- LSH-Table Cost -->
               <div id="lsh_table_cost" class="col-lg-4 col-md-4 col-sm-4">
                 <div class="row">
-                  <div class="col-lg-5 col-md-5 col-sm-5" style="">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="update" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Write</p>
+                      <p>Write</p>
                     </span>
                   </div>
-                  <div id="lsh_table_write" class="col-lg-4 col-md-4 col-sm-4" style="text-align:center">
+                  <div id="lsh_table_write" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-5 col-md-5 col-sm-5" style="">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Long-range Lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Range Lookup</p>
+                      <p>Range Lookup</p>
                     </span>
                   </div>
-                  <div id="lsh_table_long_range_lookup" class="col-lg-4 col-md-4 col-sm-4" style="text-align:center">
+                  <div id="lsh_table_long_range_lookup" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-5 col-md-5 col-sm-5" style="">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Existing-point lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Existing-point Lookup</p>
+                      <p>Existing-point Lookup</p>
                     </span>
                   </div>
-                  <div id="lsh_table_existing_point_lookup" class="col-lg-4 col-md-4 col-sm-4" style="text-align:center">
+                  <div id="lsh_table_existing_point_lookup" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-5 col-md-5 col-sm-5" style="">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Zero-result lookup" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px">Zero-result Lookup</p>
+                      <p>Zero-result Lookup</p>
                     </span>
                   </div>
-                  <div id="lsh_table_zero_result_lookup" class="col-lg-4 col-md-4 col-sm-4" style="text-align:center">
+                  <div id="lsh_table_zero_result_lookup" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-5 col-md-5 col-sm-5" style="">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Required Memory of the In-memory Hash Table " data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px;font-weight:bold">Memory</p>
+                      <p style="font-weight:bold">Memory</p>
                     </span>
                   </div>
-                  <div id="lsh_table_memory" class="col-lg-4 col-md-4 col-sm-4" style="text-align:center;">
+                  <div id="lsh_table_memory" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center;">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-5 col-md-5 col-sm-5" style="">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Throughput (ops/second)" data-tooltip-position="bottom">
-                      <p style="text-align: center;font-size:15px;font-weight:bold">Throughput</p>
+                      <p style="font-weight:bold">Throughput</p>
                     </span>
                   </div>
-                  <div id="lsh_table_throughput" class="col-lg-4 col-md-4 col-sm-4" style="text-align:center;">
+                  <div id="lsh_table_throughput" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center;">
                   </div>
                 </div>
               </div>
@@ -699,7 +711,7 @@
                       <p style="text-align: center;font-size:15px">Memory</p>
                     </span>
                   </div> -->
-                  <div id="lsm_tree_memory" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;font-weight:bold">
+                  <div id="lsm_tree_memory" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;d">
                   </div>
                 </div>
                 <div class="row">
@@ -708,7 +720,7 @@
                       <p style="text-align: center;font-size:15px">Throughput</p>
                     </span>
                   </div> -->
-                  <div id="lsm_tree_throughput" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;font-weight:bold">
+                  <div id="lsm_tree_throughput" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;">
                   </div>
                 </div>
               </div>

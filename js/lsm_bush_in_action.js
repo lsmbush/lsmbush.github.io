@@ -829,7 +829,7 @@ function initScenario2(){
 function initScenario3(){
 	// LSM-Tree
 	document.getElementById("lsm_tree_mbuffer").value=2; //in MB
-	document.getElementById("lsm_tree_T").readOnly=true;
+	//document.getElementById("lsm_tree_T").readOnly=true;
 	document.getElementById("lsm_tree_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_tree_mfilter_per_entry").value=10; //0 bits per element
 	document.getElementsByName("lsm_tree_type")[0].checked=true;

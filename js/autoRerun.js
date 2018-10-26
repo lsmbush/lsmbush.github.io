@@ -35,9 +35,18 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
   draw_lsm_graph("lsm_bush");
 }
 
-function update_lsm_tree(lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E){
-  var T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
-  document.getElementById("lsm_tree_T").value=T;
+function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E){
+  if(id == 'N' || id == 'lsm_tree_L'){
+    var T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
+    document.getElementById("lsm_tree_T").value=T;
+  }else{
+    var L = Math.ceil(Math.log(N*E*(lsm_tree_T - 1)/lsm_tree_mbuffer/lsm_tree_T+ 1/lsm_tree_T)/Math.log(lsm_tree_T));
+    if(L < 0){
+      L = 0;
+    }
+    document.getElementById("lsm_tree_L").value=L;
+  }
+
   	draw_lsm_graph("lsm_tree");
 }
 
@@ -161,8 +170,22 @@ function re_run(e) {
         lsm_tree_mbuffer = 2;
     }
     lsm_tree_mbuffer *= 1048576;
+    var lsm_tree_T = document.getElementById("lsm_tree_T").value;
+    if(isNaN(lsm_tree_T)){
+      alert("LSM-Tree T="+lsm_tree_T+" is invalid.")
+      console.log("LSM-Tree size ratio is invalid: "+lsm_tree_T);
+      lsm_tree_T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
+      document.getElementById("lsm_tree_T").value = lsm_tree_T;
+    }
+    lsm_tree_T = parseFloat(lsm_tree_T);
+    if (lsm_tree_T<2){
+
+        alert("Size Ratio="+lsm_tree_T+" is too small in LSM-Tree.");
+        document.getElementById("lsm_tree_T").value = 2;
+        lsm_tree_T = 2;
+    }
     var lsm_tree_type=getRadioValueByName("lsm_tree_type");
-    update_lsm_tree(lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E);
+    update_lsm_tree(event.target.id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E);
 
 
     // lsm bush

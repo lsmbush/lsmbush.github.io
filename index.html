@@ -496,7 +496,7 @@
                     <br>
                     <div class="input-group">
                     <span class="input-group-addon"><span data-tooltip="bits per entry (e.g., 10)." data-tooltip-position="bottom"> Bloom filters' bits per entry</span></span>
-                      <input id="lsm_tree_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" style="text-align:right"/>
+                      <input id="lsm_tree_mfilter_per_entry" type="text" class="form-control" aria-label="bits per entry" placeholder="Bloom filters' memory allocated to each entry (e.g., 5)" onchange="re_run(event, 'input7')" style="text-align:right"/>
                     </div>
                     <br>
                     <div class="input-group">

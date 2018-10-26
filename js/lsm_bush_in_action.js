@@ -251,16 +251,30 @@ function getLeveledLongRangeLookupCost(i, initCapacity, L, filter_array, N, T, B
 
 function getLeveledUpdateCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	if(leveltier < 4){
-		if(i >= L-Y){
-			return (T - 1)/(B*(Z + 1)*Mu);
+		if(leveltier == 0){
+			return 1/(B*Mu);
+		}else if(leveltier == 1){
+			return T/(B*Mu);
+		}else if(leveltier == 2){
+			if(i >= L-Y){
+				return (T + 1)/(B*Mu);
+			}else{
+				return 1/(B*Mu);
+			}
 		}else{
-			return (T - 1)/(B*(K + 1)*Mu);
+			if(i >= L-Y){
+				return (T - 1)/(B*(Z + 1)*Mu);
+			}else{
+				return (T - 1)/(B*(K + 1)*Mu);
+			}
 		}
+
 	}else{
 		if(i >= L-Y){
-			return LLBushK/(B*Mu);
+			return (LLBushK+1)/(B*Mu);
 		}else{
-			return 1/(B*Mu)
+			//var r = Math.pow(LLBushT, Math.pow(2, L - i - 1));
+			return 1/(B*Mu);
 		}
 	}
 
@@ -815,7 +829,7 @@ function initScenario2(){
 function initScenario3(){
 	// LSM-Tree
 	document.getElementById("lsm_tree_mbuffer").value=2; //in MB
-	document.getElementById("lsm_tree_L").readOnly=true;
+	document.getElementById("lsm_tree_T").readOnly=true;
 	document.getElementById("lsm_tree_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_tree_mfilter_per_entry").value=10; //0 bits per element
 	document.getElementsByName("lsm_tree_type")[0].checked=true;
@@ -1267,7 +1281,7 @@ function draw_lsm_graph(prefix) {
 		];
 		var sum=w+qL+v+r;
 		var coefficient_array = [
-			write_latency*w/sum,
+			(read_latency+write_latency)*w/sum,
 			read_latency*qL/sum,
 			read_latency*v/sum,
 			read_latency*r/sum,
@@ -1412,7 +1426,7 @@ function lsh_table_cost(){
 
 	var sum=r+qL+v+w;
 	var coefficient_array = [
-		write_latency*w/sum,
+		(read_latency+write_latency)*w/sum,
 		read_latency*qL/sum,
 		read_latency*v/sum,
 		read_latency*r/sum,

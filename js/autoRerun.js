@@ -36,11 +36,8 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
 }
 
 function update_lsm_tree(lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E){
-  var L = Math.ceil(Math.log(N*E*(lsm_tree_T - 1)/lsm_tree_mbuffer/lsm_tree_T + 1/lsm_tree_T)/Math.log(lsm_tree_T));
-  if(L <= 0){
-    L = 0;
-  }
-  document.getElementById("lsm_tree_L").value=L;
+  var T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
+  document.getElementById("lsm_tree_T").value=T;
   	draw_lsm_graph("lsm_tree");
 }
 
@@ -136,7 +133,19 @@ function re_run(e) {
     scenario1();
 
     // lsm tree
-    var L = parseInt(document.getElementById("lsm_tree_L").value);
+    var L = document.getElementById("lsm_tree_L").value;
+    if(isNaN(L)){
+      alert("LSM-Tree Level="+L+" is invalid.")
+      console.log("LSM-Tree level is invalid: "+L);
+      document.getElementById("lsm_tree_L").value = 6;
+      lsm_tree_L = 6;
+    }
+    lsm_tree_L = parseInt(L);
+    if(lsm_tree_L < 0){
+      alert("Level="+lsm_tree_L+" is too small in LSM-Tree.");
+      document.getElementById("lsm_tree_L").value = 6;
+      lsm_tree_L = 6;
+    }
     var lsm_tree_mbuffer = document.getElementById("lsm_tree_mbuffer").value;
     if(isNaN(lsm_tree_mbuffer)){
       alert("LSM-Tree buffer="+lsm_tree_mbuffer+" MB is invalid.")
@@ -152,21 +161,6 @@ function re_run(e) {
         lsm_tree_mbuffer = 2;
     }
     lsm_tree_mbuffer *= 1048576;
-
-    var lsm_tree_T = document.getElementById("lsm_tree_T").value;
-    if(isNaN(lsm_tree_T)){
-      alert("LSM-Tree T="+lsm_tree_T+" is invalid.")
-      console.log("LSM-Tree T is invalid: "+lsm_tree_T);
-      lsm_tree_T = calc_T(N, lsm_tree_mbuffer*1024*1024, E, L, 10000001);
-      document.getElementById("lsm_tree_T").value = lsm_tree_T;
-    }
-    lsm_tree_T = parseFloat(lsm_tree_T);
-    if (lsm_tree_T<2){
-      alert("T="+lsm_tree_T+" is too small.")
-      console.log("T in LSM-Tree is too small: "+lsm_tree_T);
-      lsm_tree_T = 2;
-      document.getElementById("lsm_tree_T").value = lsm_tree_T;
-    }
     var lsm_tree_type=getRadioValueByName("lsm_tree_type");
     update_lsm_tree(lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E);
 

@@ -56,7 +56,7 @@ function parseInputTextBoxes(prefix="lsm_bush")
     parsedBoxes.mfilter_per_entry = parseFloat(document.getElementById(prefix+"_mfilter_per_entry").value);
 		parsedBoxes.mfence_pointer_per_entry = parseFloat(document.getElementById(prefix+"_mfence_pointer_per_entry").value);
 		parsedBoxes.hash_table_gc_threshold = parseFloat(document.getElementById("lsh_table_gc_threshold").value);
-    parsedBoxes.leveltier = getRadioValueByName(prefix+"_type");
+    parsedBoxes.leveltier = getBoldButtonByName(prefix+"_type");
 		parsedBoxes.isOptimalFPR = true;
 		if(prefix == "lsm_tree"){
 			parsedBoxes.isOptimalFPR = getRadioValueByName("fpr_radio"); // 0 -> fixed; 1 -> optimal for non-result point lookup ; 2 -> optimal for point lookup
@@ -300,7 +300,7 @@ function getLeveledSpaceAmp(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, 
 }
 
 function getLeveledMemory(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
-	return filter_array[i-1].mem+filter_array[i-1].nokeys*key_size*mfence_pointer_per_entry/8;
+	return filter_array[i-1].mem+filter_array[i-1].nokeys*key_size*mfence_pointer_per_entry;
 }
 
 function removeAllChildren(div){
@@ -379,6 +379,25 @@ function pad(n, width, z) {
   z = z || '0';
   n = n + '';
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+function getBoldButtonByName(buttonName){
+	var lsm_map = {
+		"Leveling":1,
+		"Tiering":0,
+		"Lazy-Leveling":2,
+		"LL-Bush":4,
+		"LSM-Bush":5,
+		"3L-Bush":6
+	}
+	var buttons = document.getElementsByName(buttonName);
+	var val;
+	for(var i = 0; i < buttons.length; i++){
+		if(buttons[i].style.fontWeight=='bold'){
+			val = lsm_map[buttons[i].id];
+		}
+	}
+	return parseInt(val);
 }
 
 function getRadioValueByName(radioName)
@@ -795,12 +814,13 @@ function eval_R(filters, leveltier, T, Y, K, Z, vflag=false, LLBushK, LLBushT)
 
 }
 
-function reset_button_colors()
+function reset_button_colors(name='lsm_bush_type')
 {
 	var color='#777';
-    //document.getElementById("scenario1").style.background=color;
-    //document.getElementById("scenario2").style.background=color;
-    //document.getElementById("scenario3").style.background=color;
+	var buttons = document.getElementsByName(name);
+	for(var i = 0; i < buttons.length; i ++){
+		buttons[i].style.fontWeight='';
+	}
 }
 
 function initScenario1(){
@@ -817,12 +837,11 @@ function initScenario2(){
 	document.getElementById("lsm_bush_L").value=3;
 	document.getElementById("lsm_bush_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_bush_mfilter_per_entry").value= 10 // bits per element
-	document.getElementsByName("lsm_bush_type")[0].checked=true;
-	document.getElementsByName("lsm_bush_type")[1].checked=false;
-	document.getElementsByName("lsm_bush_type")[2].checked=false;
 	document.getElementById("lsm_bush_T").value = 55.7982237;
 	document.getElementById("lsm_bush_T").readOnly=true;
 	document.getElementById("lsm_bush_K").value = 2;
+	document.getElementsByName("lsm_bush_type")[1].style.fontWeight='bold';
+
 	scenario2();
 }
 
@@ -832,10 +851,10 @@ function initScenario3(){
 	//document.getElementById("lsm_tree_T").readOnly=true;
 	document.getElementById("lsm_tree_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_tree_mfilter_per_entry").value=10; //0 bits per element
-	document.getElementsByName("lsm_tree_type")[0].checked=true;
-	document.getElementsByName("lsm_tree_type")[1].checked=false;
 	document.getElementById("lsm_tree_L").value=6;
 	document.getElementById("lsm_tree_T").value=8.8009868;
+	document.getElementsByName("lsm_tree_type")[0].style.fontWeight='bold';
+
 	scenario3();
 }
 
@@ -856,11 +875,13 @@ function init(){
 	document.getElementById("qL").value = 0.000001;
 	//document.getElementById("X").value = numberWithCommas(0);
 
+	//buttons:
+	document.getElementById("LSM-Bush").style.fontWeight='bold';
+	document.getElementById("Leveling").style.fontWeight='bold';
+
 	initScenario1();
 	initScenario2();
 	initScenario3();
-
-	reset_button_colors();
 
 }
 
@@ -2626,52 +2647,35 @@ function AutoTune3(e){
 	clickbloomTuningButton(true)
 }
 
-function MergeByFliudLSMTree(){
-	document.getElementById("L").readOnly=false;
-	document.getElementById("X").value = numberWithCommas(0);
-document.getElementById("input-group-T").style.display = '';
-	document.getElementById("input-group-Fluid-K").style.display = '';
-	document.getElementById("input-group-Fluid-Z").style.display = '';
-	var T = document.getElementById("T").value;
-	if(lastTreeType == 1){
-		document.getElementById("Fluid LSM-Tree K").value = 1;
-		document.getElementById("Fluid LSM-Tree Z").value = 1;
-	}else if(lastTreeType == 0){
-		document.getElementById("Fluid LSM-Tree K").value = Math.ceil(T - 1);
-		document.getElementById("Fluid LSM-Tree Z").value = Math.ceil(T - 1);
-	}else if(lastTreeType == 2){
-		document.getElementById("Fluid LSM-Tree K").value = Math.ceil(T - 1);
-		document.getElementById("Fluid LSM-Tree Z").value = 1;
+function MergeByLSMTree(lsm_tree_type){
+	document.getElementById("lsm_tree_L").readOnly=false;
+	reset_button_colors("lsm_tree_type");
+	if(lsm_tree_type == 0){
+		document.getElementById('Tiering').style.fontWeight = 'bold';
+	}else if(lsm_tree_type == 1){
+		document.getElementById('Leveling').style.fontWeight = 'bold';
+	}else{
+		document.getElementById('Lazy-Leveling').style.fontWeight = 'bold';
 	}
-	document.getElementById("input-group-LL-Bush-K").style.display = 'none';
-	document.getElementById("input-group-LL-Bush-T").style.display = 'none';
-	document.getElementById("input-group-LL-Bush-Updates").style.display = 'none';
-	re_run(event, 'input7');
+	re_run(event, 'input4');
 }
 
-function MergeNotyFliudLSMTree(){
-	draw_lsm_graph("lsm_tree");
-}
-
-function MergeByLLBush(){
-	document.getElementById("lsm_bush_L").readOnly=true;
-	document.getElementById("lsm_bush_T").readOnly=true;
-	event.target.id="N";
-	//event.target.id="N";
-	re_run(event, 'input7');
-
-}
-
-function MergeByLSMBush(){
-	document.getElementById("lsm_bush_L").readOnly=false;
-	document.getElementById("lsm_bush_T").readOnly=true;
-	re_run(event, 'input7');
-}
-
-function MergeBy3LBush(){
-	document.getElementById("lsm_bush_L").value = 3;
-	document.getElementById("lsm_bush_L").readOnly=true;
-	document.getElementById("lsm_bush_T").readOnly=true;
+function MergeByLSMBush(lsm_bush_type){
+	reset_button_colors("lsm_bush_type");
+	if(lsm_bush_type == 4){
+		document.getElementById("lsm_bush_L").readOnly=true;
+		document.getElementById("lsm_bush_T").readOnly=true;
+		document.getElementById("LL-Bush").style.fontWeight='bold';
+	}else if(lsm_bush_type == 5){
+		document.getElementById("lsm_bush_L").readOnly=false;
+		document.getElementById("lsm_bush_T").readOnly=true;
+		document.getElementById("LSM-Bush").style.fontWeight='bold';
+	}else{
+		document.getElementById("lsm_bush_L").value = 3;
+		document.getElementById("lsm_bush_L").readOnly=true;
+		document.getElementById("lsm_bush_T").readOnly=true;
+		document.getElementById("3L-Bush").style.fontWeight='bold';
+	}
 	re_run(event, 'input7');
 }
 

@@ -36,9 +36,17 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
 }
 
 function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E){
-  if(id == 'N' || id == 'lsm_tree_L'){
+  if(id == 'lsm_tree_L'){
+    var maxL = Math.ceil(Math.log(N*E*(2 - 1)/lsm_tree_mbuffer/2+ 1/lsm_tree_T)/Math.log(2));
     var T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
-    document.getElementById("lsm_tree_T").value=T;
+    if(T < 2){
+      alert("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.")
+      console.log("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.");
+      update_lsm_tree('lsm_tree_T', lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E)
+    }else{
+      document.getElementById("lsm_tree_T").value=T;
+    }
+
   }else{
     var L = Math.ceil(Math.log(N*E*(lsm_tree_T - 1)/lsm_tree_mbuffer/lsm_tree_T+ 1/lsm_tree_T)/Math.log(lsm_tree_T));
     if(L < 0){
@@ -184,7 +192,7 @@ function re_run(e) {
         document.getElementById("lsm_tree_T").value = 2;
         lsm_tree_T = 2;
     }
-    var lsm_tree_type=getRadioValueByName("lsm_tree_type");
+    var lsm_tree_type=getBoldButtonByName("lsm_tree_type");
     update_lsm_tree(event.target.id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E);
 
 
@@ -229,7 +237,7 @@ function re_run(e) {
     }
 
 
-    var lsm_bush_type = getRadioValueByName("lsm_bush_type");
+    var lsm_bush_type = getBoldButtonByName("lsm_bush_type");
     re_run_now();
 
     update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E);

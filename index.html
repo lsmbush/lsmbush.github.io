@@ -315,7 +315,7 @@
 
                 <p>
                   Workload: The workload consists of <span id="write-prop-text">50.0000</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries.
-                  To customize the workload, click <span data-tooltip="click here to customize the workload" data-tooltip-position="bottom" id="workload-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
+                  To edit the workload characteristics, click <span data-tooltip="click here to customize the workload" data-tooltip-position="bottom" id="workload-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
                 </p>
                 <div id="workload-setting" class="row" style="display:none">
                   <div class="row">
@@ -410,10 +410,14 @@
                     </div>
                     <br>
                     <div id="LSM-Bush Merge Policy" class="input-group">
-                    <span class="input-group-addon" style="text-align: left;"><span data-tooltip="With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
-                      <span class="input-group-addon">3L-Bush &nbsp;<input id="3L-Bush" name="lsm_bush_type" type="radio" aria-label="3L-Bush" value="6" checked="false" onchange="MergeBy3LBush()"/></span>
+                      <span class="input-group-addon" style="text-align: left;"><span data-tooltip="With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
+                      <span class="input-group-addon"><span id="3L-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(6)" style="cursor:pointer">3L-Bush &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="LSM-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(5)" style="cursor:pointer">LSM-Bush &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="LL-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(4)" style="cursor:pointer">LL-Bush &nbsp;</span></span>
+
+                      <!-- <span class="input-group-addon"> 3L-Bush &nbsp;<input id="3L-Bush" name="lsm_bush_type" type="radio" aria-label="3L-Bush" value="6" checked="false" onchange="MergeBy3LBush()"> </input></span>
                       <span class="input-group-addon">LSM-Bush &nbsp;<input id="LSM-Bush" name="lsm_bush_type" type="radio" aria-label="LSM-Bush" value="5" checked="false" onchange="MergeByLSMBush()"/></span>
-                      <span class="input-group-addon">LL-Bush &nbsp;<input id="LL-Bush" name="lsm_bush_type" type="radio" aria-label="LL-Bush" value="4" checked="false" onchange="MergeByLLBush()"/></span>
+                      <span class="input-group-addon">LL-Bush &nbsp;<input id="LL-Bush" name="lsm_bush_type" type="radio" aria-label="LL-Bush" value="4" checked="false" onchange="MergeByLLBush()"/></span> -->
                     </div>
 
                     <br>
@@ -470,9 +474,12 @@
                     <br>
                     <div id="LSM-Tree Merge Policy" class="input-group">
                     <span class="input-group-addon" style="text-align: left;"><span data-tooltip="Merge Policies: With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs. For lazy leveling, the largest level has only one run while the rest levels have (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
-                      <span class="input-group-addon">leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="level" value="1" checked="true" onchange="MergeNotyFliudLSMTree()"/></span>
+                    <span class="input-group-addon"><span id="Leveling" name="lsm_tree_type" onclick="MergeByLSMTree(1)" style="cursor:pointer">Leveling &nbsp;</span></span>
+                    <span class="input-group-addon"><span id="Tiering" name="lsm_tree_type" onclick="MergeByLSMTree(0)" style="cursor:pointer" >Tiering &nbsp;</span></span>
+                    <span class="input-group-addon"><span id="Lazy-Leveling" name="lsm_tree_type" onclick="MergeByLSMTree(2)" style="cursor:pointer">Lazy Leveling &nbsp;</span></span>
+                      <!-- <span class="input-group-addon">leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="level" value="1" checked="true" onchange="MergeNotyFliudLSMTree()"/></span>
                       <span class="input-group-addon">tiering&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="tier" value="0" onchange="MergeNotyFliudLSMTree()"/></span>
-                      <span class="input-group-addon">lazy leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="lazylevel" value="2" checked="false" onchange="MergeNotyFliudLSMTree()"/></span>
+                      <span class="input-group-addon">lazy leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="lazylevel" value="2" checked="false" onchange="MergeNotyFliudLSMTree()"/></span> -->
                       <!-- <span class="input-group-addon">Fliud LSM-Tree&nbsp;<input id="leveltier" name="ltradio" type="radio" aria-label="Fliud LSM-Tree" value="3" checked="false" onchange="MergeByFliudLSMTree()"/></span> -->
                     </div>
                     <br>

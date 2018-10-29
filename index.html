@@ -245,11 +245,11 @@
             <div class="row" style="text-align: center">
                 <h2>LSM-Bush in Action</h2>
                 <p>
-                  We present an interactive demo that allows to visualize and compute the core cost metrics for LSM-bush as well as for LSH-table and LSM-tree with respect to the dataset, different tunings, and the application workload.
+                  This is an interactive demo that allows to visualize and compute the core cost metrics of different key-value store designs as well as compare their overall throughput. You can interactively edit hardware and workload parameters as well as critical key-value store design knob. With every edit, the demo system immediately updates all individual costs as well as the overall throughput (at the bottom of the page). It uses the cost models as described in the paper submission. The demo also provides a visualization of each design (e.g., its runs, levels, etc.). You may hover over the different parts of each visualization to get more information regarding the final instance of the design over the specific dataset and hardware provided as input and compare these choices across the key-values store designs.
                 </p>
                 <br>
                 <p>
-                The default dataset consists of 1 TB of data comprising 16 byte key-value pairs of which the key comprises 8 bytes. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="cursor:pointer;text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
+                Dataset: The default dataset consists of 1 TB of data comprising 16 byte key-value pairs of which the key comprises 8 bytes. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="cursor:pointer;text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
                 </p>
                 <div id="dataset-setting" class="row" style="display:none">
                   <div class="row">
@@ -282,7 +282,7 @@
 
                 <br>
                 <p>
-                  The storage device is an SSD with 4 Kb blocks and for which reading a block takes 20 microseconds and writing a block takes 100 microseconds. To edit the SSD default settings, click <span data-tooltip="click here to edit the SSD default settings" data-tooltip-position="bottom" id="storage-device-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showStorageDevice()"><b>here</b></span>.
+                  Hardware: The storage device is an SSD with 4 Kb blocks and for which reading a block takes 20 microseconds and writing a block takes 100 microseconds. To edit the SSD default settings, click <span data-tooltip="click here to edit the SSD default settings" data-tooltip-position="bottom" id="storage-device-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showStorageDevice()"><b>here</b></span>.
                 </p>
                 <div id="storage-device-setting" class="row" style="display:none">
                   <div class="row">
@@ -314,7 +314,7 @@
                 <br>
 
                 <p>
-                  The workload consists of <span id="write-prop-text">50.0000</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries.
+                  Workload: The workload consists of <span id="write-prop-text">50.0000</span>% writes, <span id="point-lookup-prop-text">49.9999</span>% point lookups, and <span id="range-lookup-prop-text">0.0001</span>% range lookups with  target range of <span id="range-lookup-target-size-text">8192</span> entries.
                   To customize the workload, click <span data-tooltip="click here to customize the workload" data-tooltip-position="bottom" id="workload-trigger" style="cursor:pointer;text-decoration:underline;" onclick="showWorkload()"><b>here</b></span>.
                 </p>
                 <div id="workload-setting" class="row" style="display:none">

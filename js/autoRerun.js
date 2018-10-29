@@ -101,6 +101,12 @@ function re_run(e) {
     var v=parseFloat(document.getElementById("v").value);
     var qL=parseFloat(document.getElementById("qL").value);
 
+    document.getElementById("data_size_text").innerText=formatBytes(N*E,1);
+    document.getElementById("E_text").innerText = E;
+    document.getElementById("P_text").innerText = formatBytes(P,1);
+    document.getElementById("read_latency_text").innerText = document.getElementById("read-latency").value;
+    document.getElementById("write_latency_text").innerText = document.getElementById("write-latency").value;
+
     if(event.target.id == "Key-Size"){
       var key_size = document.getElementById("Key-Size").value;
       if(isNaN(key_size)){
@@ -112,10 +118,10 @@ function re_run(e) {
         console.log("Key Size should be in the range of (0, " + E + ") :"+key_size)
         document.getElementById("Key-Size").value=E/2;
       }else{
-        document.getElementById("mhash_table_per_entry").value=key_size*8;
         document.getElementById("lsm_bush_mfence_pointer_per_entry").value=key_size/(P/E)*8;
         document.getElementById("lsm_tree_mfence_pointer_per_entry").value=key_size/(P/E)*8;
       }
+      document.getElementById("key_size_text").value=key_size;
     }
 
     //lsh-Table

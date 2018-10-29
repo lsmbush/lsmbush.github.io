@@ -422,13 +422,13 @@
 
                     <br>
                     <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
+                      <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels (L) </span></span>
                       <input id="lsm_bush_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" />
                     </div>
 
                     <br>
                     <div id="input-group-LL-Bush-T" class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="Growth rate of the size ratio (e.g., 2)." data-tooltip-position="bottom"> LL-Bush T</span></span>
+                      <span class="input-group-addon"><span data-tooltip="Growth rate of the size ratio (e.g., 2)." data-tooltip-position="bottom"> Ratios' Growth Rate (T)</span></span>
                       <input id="lsm_bush_T" type="text" class="form-control" aria-label="Size Ratio T" placeholder="growth rate of the size ratio (e.g., 2)" style="text-align:right" onchange="re_run(event, 'input8')" />
                       <!-- <span class="input-group-addon">(bytes)</span> -->
                     </div>
@@ -491,14 +491,14 @@
                     </div>
                     <br>
                     <div class="input-group">
-                      <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels </span></span>
+                      <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels (L) </span></span>
                       <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" />
                     </div>
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon" style="text-align: left;"><span data-tooltip="False Positive Rate Allocation Policy" data-tooltip-position="bottom" > FPR Allocation </span></span>
-                      <span class="input-group-addon"><span data-tooltip="Distribute the memory evenly to each level" data-tooltip-position="bottom">Fixed &nbsp;<input id="fpr_policy" name="fpr_radio" type="radio" aria-label="fixed" value="0" onchange="re_run(event, 'input7')"></span></span>
-                      <span class="input-group-addon"><span data-tooltip="Distribute the memory to minimize the non-result point lookup cost" data-tooltip-position="bottom"> Optimal for No-result &nbsp;<input id="fpr_policy" name="fpr_radio" type="radio" aria-label="optimal for non-result" value="1" checked="true" onchange="re_run(event, 'input7')"></span></span>
+                      <span class="input-group-addon"><span id="Even-FPR" name="fpr_policy" data-tooltip="Distribute the memory evenly to each level" data-tooltip-position="bottom" onclick="AllocateFPR(0)" style="cursor:pointer">Fixed &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="Optimal-FPR" name="fpr_policy" data-tooltip="Distribute the memory to minimize the non-result point lookup cost" data-tooltip-position="bottom" onclick="AllocateFPR(1)" style="cursor:pointer" >Optimal for No-result &nbsp;</span></span>
                     </div>
                     <br>
                     <div class="input-group">

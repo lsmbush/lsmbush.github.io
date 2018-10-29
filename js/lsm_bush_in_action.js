@@ -59,7 +59,7 @@ function parseInputTextBoxes(prefix="lsm_bush")
     parsedBoxes.leveltier = getBoldButtonByName(prefix+"_type");
 		parsedBoxes.isOptimalFPR = true;
 		if(prefix == "lsm_tree"){
-			parsedBoxes.isOptimalFPR = getRadioValueByName("fpr_radio"); // 0 -> fixed; 1 -> optimal for non-result point lookup ; 2 -> optimal for point lookup
+			parsedBoxes.isOptimalFPR = getBoldButtonByName("fpr_policy"); // 0 -> fixed; 1 -> optimal for non-result point lookup ; 2 -> optimal for point lookup
 		}
 
 
@@ -383,6 +383,8 @@ function pad(n, width, z) {
 
 function getBoldButtonByName(buttonName){
 	var lsm_map = {
+		"Even-FPR":0,
+		"Optimal-FPR":1,
 		"Leveling":1,
 		"Tiering":0,
 		"Lazy-Leveling":2,
@@ -878,6 +880,7 @@ function init(){
 	//buttons:
 	document.getElementById("LSM-Bush").style.fontWeight='bold';
 	document.getElementById("Leveling").style.fontWeight='bold';
+	document.getElementById("Optimal-FPR").style.fontWeight='bold';
 
 	initScenario1();
 	initScenario2();
@@ -2647,6 +2650,15 @@ function AutoTune3(e){
 	clickbloomTuningButton(true)
 }
 
+function AllocateFPR(fpr_type){
+	reset_button_colors("fpr_policy");
+	if(fpr_type == 0){
+		document.getElementById("Even-FPR").style.fontWeight = 'bold';
+	}else{
+		document.getElementById("Optimal-FPR").style.fontWeight = 'bold';
+	}
+	re_run(event, 'input4');
+}
 function MergeByLSMTree(lsm_tree_type){
 	document.getElementById("lsm_tree_L").readOnly=false;
 	reset_button_colors("lsm_tree_type");

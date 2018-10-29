@@ -300,7 +300,7 @@ function getLeveledSpaceAmp(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, 
 }
 
 function getLeveledMemory(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
-	return filter_array[i-1].mem+filter_array[i-1].nokeys*key_size*mfence_pointer_per_entry;
+	return filter_array[i-1].mem+(filter_array[i-1].nokeys/B)*key_size*8;
 }
 
 function removeAllChildren(div){
@@ -1102,7 +1102,7 @@ function draw_lsm_graph(prefix) {
 	var fence_pointer_img = document.createElement("img");
 	fence_pointer_img.setAttribute("class","img-responsive img-centered")
 	fence_pointer_img.setAttribute("style","width:60px;margin-left:10px");
-	div_col3.setAttribute("data-tooltip","The memory allocated for fence pointers across all levels is " + formatBytes(N*key_size*mfence_pointer_per_entry/8) + ".");
+	div_col3.setAttribute("data-tooltip","The memory allocated for fence pointers across all levels is " + formatBytes(N/B*key_size) + ".");
 	div_col3.setAttribute("data-tooltip-position","top");
 	fence_pointer_img.src='./images/sign.png';
 	div_col3.appendChild(fence_pointer_img);

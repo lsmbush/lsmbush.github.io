@@ -262,18 +262,18 @@ function getLeveledUpdateCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K
 		if(leveltier == 0){
 			return 1/(B*Mu);
 		}else if(leveltier == 1){
-			return T/(B*Mu);
+			return (T-1)/(B*Mu);
 		}else if(leveltier == 2){
 			if(i >= L-Y){
-				return (T + 1)/(B*Mu);
+				return (T - 1)/(B*Mu);
 			}else{
 				return 1/(B*Mu);
 			}
 		}else{
 			if(i >= L-Y){
-				return (T - 1)/(B*(Z + 1)*Mu);
+				return (T - 1)/(B*Mu);
 			}else{
-				return (T - 1)/(B*(K + 1)*Mu);
+				return 1/(B*Mu);
 			}
 		}
 

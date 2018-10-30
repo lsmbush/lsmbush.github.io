@@ -94,72 +94,80 @@ function Filter() {
     var mem;
 }
 
-function getTotalNonExistingPointLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalNonExistingPointLookupCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledNonExistingPointLookupCost(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledNonExistingPointLookupCost(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 
 	return total;
 
 }
 
-function getTotalExistingPointLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalExistingPointLookupCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledExistingPointLookupCost(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledExistingPointLookupCost(j, initCapacity,E,  L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 
 	return total;
 }
 
-function getTotalShortRangeLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalShortRangeLookupCost(i, initCapacity,E,  L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledShortRangeLookupCost(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledShortRangeLookupCost(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 
 	return Math.ceil(total);
 }
 
-function getTotalLongRangeLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalLongRangeLookupCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledLongRangeLookupCost(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledLongRangeLookupCost(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 	return Math.ceil(total);
 }
 
-function getTotalUpdateCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalUpdateCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledUpdateCost(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledUpdateCost(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 	return total;
 
 }
 
-function getTotalSpaceAmp(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalSpaceAmp(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledSpaceAmp(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledSpaceAmp(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 	return total;
 }
 
-function getTotalMemory(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalMemory(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var total = 0;
 	for(j = 1; j <= L; j++){
-		total += getLeveledMemory(j, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+		total += getLeveledMemory(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
 	return total;
 }
 
-function getLeveledLevel(i, initCapacity, L, filter_array, N, T, B,Y,  K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getTotalStorage(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+	var total = 0;
+	for(j = 1; j <= L; j++){
+		total += getLeveledStorage(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+	}
+	return total;
+}
+
+function getLeveledLevel(i, initCapacity, E, L, filter_array, N, T, B,Y,  K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	return i;
 }
 
-function getLeveledNonExistingPointLookupCost(i, initCapacity, L, filter_array, N, T, B,Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledNonExistingPointLookupCost(i, initCapacity, E, L, filter_array, N, T, B,Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var result;
 	result = calc_R(filter_array[i - 1]);
 	if(leveltier >= 4){
@@ -177,7 +185,7 @@ function getLeveledNonExistingPointLookupCost(i, initCapacity, L, filter_array, 
 }
 
 
-function getLeveledExistingPointLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledExistingPointLookupCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	if(leveltier >= 4){
 		K = Math.floor(Math.pow(LLBushT, Math.pow(2, L - i - 1)));
 		Z = 1;
@@ -197,7 +205,7 @@ function getLeveledExistingPointLookupCost(i, initCapacity, L, filter_array, N, 
 	return result;
 }
 
-function getLeveledShortRangeLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledShortRangeLookupCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	if(leveltier >= 4){
 		K = Math.floor(Math.pow(LLBushT, Math.pow(2, L - i - 1)));
 		Z = 1;
@@ -224,7 +232,7 @@ function getLeveledShortRangeLookupCost(i, initCapacity, L, filter_array, N, T, 
 
 }
 
-function getLeveledLongRangeLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledLongRangeLookupCost(i, E, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	var final_result = 0;
 	if(leveltier < 4){
 		if(i == L){
@@ -246,10 +254,10 @@ function getLeveledLongRangeLookupCost(i, initCapacity, L, filter_array, N, T, B
 			final_result = Math.floor(result);
 		}
 	}
-	return final_result + getLeveledShortRangeLookupCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
+	return final_result+getLeveledShortRangeLookupCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 }
 
-function getLeveledUpdateCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledUpdateCost(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	if(leveltier < 4){
 		if(leveltier == 0){
 			return 1/(B*Mu);
@@ -280,7 +288,7 @@ function getLeveledUpdateCost(i, initCapacity, L, filter_array, N, T, B, Y, K, Z
 
 }
 
-function getLeveledSpaceAmp(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledSpaceAmp(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	if(leveltier < 4){
 		if(i == L){
 			return Z-1;
@@ -299,8 +307,12 @@ function getLeveledSpaceAmp(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, 
 
 }
 
-function getLeveledMemory(i, initCapacity, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+function getLeveledMemory(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
 	return filter_array[i-1].mem+(filter_array[i-1].nokeys/B)*key_size*8;
+}
+
+function getLeveledStorage(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
+	return filter_array[j-1].nokeys*E*8;
 }
 
 function removeAllChildren(div){
@@ -500,7 +512,7 @@ function initFiltersKey(N,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimal
 	if(leveltier < 4){ // origin website algorithm to construct the tree
 		var level = L - 1;
 		if(!filter_array_flag){
-			L = Math.ceil(Math.log(N*E*(T - 1)/mbuffer/T+ 1/T)/Math.log(T));
+			L = Math.ceil(Math.log(N*E/mbuffer)/Math.log(T));
 			for(var i=0;i<L;i++){
 				var newFilter = new Filter();
 				newFilter.nokeys=0;
@@ -512,7 +524,7 @@ function initFiltersKey(N,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimal
 
 
 		filter_array[L-1].nokeys+=N;
-		var remainingKeys = X -  mbuffer/E;
+		var remainingKeys = X - mbuffer/E;
 		if(remainingKeys < 0){
 			remainingKeys = 0;
 		}
@@ -546,7 +558,7 @@ function initFiltersKey(N,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimal
 
 		var level = L - 1;
 		if(!filter_array_flag){
-			L = getLLBushL(N+X, E, mbuffer, LLBushK, LLBushT);
+			L = getLLBushL_baseN(N, E, mbuffer, LLBushK, LLBushT);
 			for(var i=0;i<L;i++){
 				var newFilter = new Filter();
 				newFilter.nokeys=0;
@@ -695,7 +707,7 @@ function getBaselineFPassigment(N,E,mbuffer,T,K, Z, Y, mfilter_bits,P,leveltier,
 
 function getMonkeyFPassigment(N, E, mbuffer, T, K, Z, Y, mfilter_bits, P, leveltier, isOptimalFPR=1, r=1, v=0, X=0, LLBushK=2, LLBushT=2)
 {
-		var THRESHOLD = 1e-15;
+		var THRESHOLD = 1e-8;
     var filter_array = initFilters(N,E,mbuffer,T,K, Z, Y, mfilter_bits,P,leveltier, true, X, LLBushK, LLBushT);
 		var mem_level = filter_array.length - Y;
     // console.log(filter_array);
@@ -822,6 +834,7 @@ function reset_button_colors(name='lsm_bush_type')
 	var buttons = document.getElementsByName(name);
 	for(var i = 0; i < buttons.length; i ++){
 		buttons[i].style.fontWeight='';
+		buttons[i].style.fontSize='';
 	}
 }
 
@@ -839,7 +852,7 @@ function initScenario2(){
 	document.getElementById("lsm_bush_L").value=3;
 	document.getElementById("lsm_bush_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_bush_mfilter_per_entry").value= 10 // bits per element
-	document.getElementById("lsm_bush_T").value = 55.7982237;
+	document.getElementById("lsm_bush_T").value = 64;
 	document.getElementById("lsm_bush_T").readOnly=true;
 	document.getElementById("lsm_bush_K").value = 2;
 	document.getElementsByName("lsm_bush_type")[1].style.fontWeight='bold';
@@ -854,7 +867,7 @@ function initScenario3(){
 	document.getElementById("lsm_tree_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_tree_mfilter_per_entry").value=10; //0 bits per element
 	document.getElementById("lsm_tree_L").value=6;
-	document.getElementById("lsm_tree_T").value=8.8009868;
+	document.getElementById("lsm_tree_T").value=8.9796964;
 	document.getElementsByName("lsm_tree_type")[0].style.fontWeight='bold';
 
 	scenario3();
@@ -879,8 +892,11 @@ function init(){
 
 	//buttons:
 	document.getElementById("LSM-Bush").style.fontWeight='bold';
+	document.getElementById("LSM-Bush").style.fontSize='16px';
 	document.getElementById("Leveling").style.fontWeight='bold';
+	document.getElementById("Leveling").style.fontSize='16px';
 	document.getElementById("Optimal-FPR").style.fontWeight='bold';
+	document.getElementById("Optimal-FPR").style.fontSize='16px';
 
 	initScenario1();
 	initScenario2();
@@ -1012,7 +1028,8 @@ function draw_lsm_graph(prefix) {
 
 			var L;
 			if(leveltier < 4){
-				L = Math.ceil(Math.log(N*E*(T - 1)/mbuffer/T+ 1/T)/Math.log(T));
+				//L = Math.ceil(Math.log(N*E*(T - 1)/mbuffer/T+ 1/T)/Math.log(T));
+				L = Math.ceil(Math.log(N*Z*E/mbuffer)/Math.log(T));
 			}else if(leveltier == 4){
 				L = getLLBushL(N, E, mbuffer, lsm_bush_K, T);
 			}else{
@@ -1029,27 +1046,35 @@ function draw_lsm_graph(prefix) {
 			var filters;
 			var tmpX = X;
 	 		if(leveltier >= 4){
-				var tmpN = Math.ceil(mbuffer/E*lsm_bush_K*Math.pow(T, Math.pow(2, L - 1) - 1));
+				// var tmpN = Math.ceil(mbuffer/E*lsm_bush_K*Math.pow(T, Math.pow(2, L - 1) - 1));
 				//tmp_mfilter_bits = tmp_mfilter_bits/N*tmpN;
-				tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
-				X = N - tmpN;
-				N = tmpN;
+				// tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
+				// X = N - tmpN;
+				// N = tmpN;
+				var tmpN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, T);
+				X = tmpN - N;
+				tmp_mfilter_bits *= tmpN/N;
 			}else{
-				var tmpN = mbuffer/E*Math.pow(T, L-1)
-				tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
-				N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
+				// var tmpN = mbuffer/E*Math.pow(T, L-1)
+				// tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
+				// N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
+				N *= Z;
+				var tmpN = (T*N - mbuffer/E)/(T-1);
+
+				X = tmpN - N;
+				tmp_mfilter_bits *= tmpN/N;
 			}
 
 			if(isOptimalFPR == 0){
-				filters = getBaselineFPassigment(N, E, mbuffer, T, K, Z, Y,tmp_mfilter_bits, P, leveltier, tmpX, lsm_bush_K, T);
+				filters = getBaselineFPassigment(N, E, mbuffer, T, K, Z, Y,tmp_mfilter_bits, P, leveltier, X, lsm_bush_K, T);
 			}else{
-				filters = getMonkeyFPassigment(N, E, mbuffer, T, K, Z, Y, tmp_mfilter_bits, P, leveltier, isOptimalFPR, r, v, tmpX, lsm_bush_K, T);
+				filters = getMonkeyFPassigment(N, E, mbuffer, T, K, Z, Y, tmp_mfilter_bits, P, leveltier, isOptimalFPR, r, v, X, lsm_bush_K, T);
 			}
 
-			N = inputParameters.N;
-			if(leveltier >= 4){
-				filters = initFiltersKey(0,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimalFPR, N, lsm_bush_K, T, filters);
-			}
+			//N = inputParameters.N;
+			// if(leveltier >= 4){
+			// 	filters = initFiltersKey(0,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimalFPR, N, lsm_bush_K, T, filters);
+			// }
 
 
 	    //google.charts.setOnLoadCallback(drawChart);
@@ -1301,6 +1326,7 @@ function draw_lsm_graph(prefix) {
 			"text-align: center",
 			"text-align: center",
 			"text-align: center",
+			"text-align: center",
 			"text-align: center"
 		];
 		var sum=w+qL+v+r;
@@ -1309,6 +1335,7 @@ function draw_lsm_graph(prefix) {
 			read_latency*qL/sum,
 			read_latency*v/sum,
 			read_latency*r/sum,
+			0,
 			0
 		];
 
@@ -1318,7 +1345,8 @@ function draw_lsm_graph(prefix) {
 			"Existing Point Lookup",
 			"Zero-result Point Lookup",
 			//"Space Amplification"
-			"Memory"
+			"Memory",
+			"Storage"
 		];
 
 		var id_suffix_array = [
@@ -1327,6 +1355,7 @@ function draw_lsm_graph(prefix) {
 			"_existing_point_lookup",
 			"_zero_result_lookup",
 			"_memory",
+			"_storage"
 		]
 
 		var total_function_array = [
@@ -1334,20 +1363,21 @@ function draw_lsm_graph(prefix) {
 			getTotalLongRangeLookupCost,
 			getTotalExistingPointLookupCost,
 			getTotalNonExistingPointLookupCost,
-			getTotalMemory
+			getTotalMemory,
+			getTotalStorage
 			//getTotalSpaceAmp
 		];
 
 		var total_cost=0;
 
-		for(j=0;j<=4;j++){
+		for(j=0;j<=5;j++){
 			var div_tmp=document.getElementById(prefix+id_suffix_array[j]);
 			removeAllChildren(div_tmp);
 			div_tmp.setAttribute("style",style_array[j]);
 			var p_tmp=document.createElement("p");
 			var span_tmp=document.createElement("span");
 
-			var cost = total_function_array[j](i+1, mbuffer/E, L, filters, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, lsm_bush_K, T, key_size, mfence_pointer_per_entry);
+			var cost = total_function_array[j](i+1, mbuffer/E, E, L, filters, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, lsm_bush_K, T, key_size, mfence_pointer_per_entry);
 			total_cost += coefficient_array[j]*cost;
 			var msg_cost = cost;
 			if(cost*1000%1 != 0){
@@ -1368,7 +1398,7 @@ function draw_lsm_graph(prefix) {
 			}
 
 			var message;
-			if(j != 4){
+			if(j < 4){
 				message = "The total cost of " +text_array[j]+ " is " + 	msg_cost + " I/O(s)."
 				cost += " I/O"
 			}else{
@@ -1383,7 +1413,7 @@ function draw_lsm_graph(prefix) {
 			p_tmp.textContent=(cost+"")
 			span_tmp.setAttribute("data-tooltip",message);
 			span_tmp.setAttribute("data-tooltip-position","bottom")
-			if(j != 4){
+			if(j < 4){
 				p_tmp.setAttribute("style","text-align: center;")
 			}else{
 				p_tmp.setAttribute("style","text-align: center;font-weight:bold");
@@ -1412,6 +1442,12 @@ function draw_lsm_graph(prefix) {
 		span_tmp.appendChild(p_tmp);
 		div_throughput.appendChild(span_tmp);
 
+
+		if(r <= 0.0){
+      document.getElementById(prefix+"_zero_result_lookup").style.display='none';
+    }else{
+      document.getElementById(prefix+"_zero_result_lookup").style.display='';
+    }
 }
 
 function lsh_table_cost(){
@@ -1437,6 +1473,7 @@ function lsh_table_cost(){
 		"text-align: center",
 		"text-align: center",
 		"text-align: center",
+		"text-align: center",
 		"text-align: center"
 	];
 
@@ -1445,7 +1482,8 @@ function lsh_table_cost(){
 		N/B,
 		"1",
 		"0",
-		N*key_size*8
+		N*key_size*8,
+		N*E*8*(1+hash_table_gc_threshold)
 	];
 
 	var sum=r+qL+v+w;
@@ -1454,6 +1492,7 @@ function lsh_table_cost(){
 		read_latency*qL/sum,
 		read_latency*v/sum,
 		read_latency*r/sum,
+		0,
 		0
 	];
 
@@ -1463,7 +1502,8 @@ function lsh_table_cost(){
 		"Existing Point Lookup",
 		"Zero-result Point Lookup",
 		//"Space Amplification"
-		"Memory"
+		"Memory",
+		"Storage"
 	];
 
 	var id_suffix_array = [
@@ -1472,10 +1512,11 @@ function lsh_table_cost(){
 		"_existing_point_lookup",
 		"_zero_result_lookup",
 		"_memory",
+		"_storage"
 	]
 	prefix = "lsh_table";
 	var total_cost = 0;
-	for(j=0;j <= 4;j++){
+	for(j=0;j <= 5;j++){
 		var div_tmp = document.getElementById(prefix+id_suffix_array[j]);
 		removeAllChildren(div_tmp);
 		div_tmp.setAttribute("style",style_array[j])
@@ -1504,7 +1545,7 @@ function lsh_table_cost(){
 		}
 
 
-		if(j != 4){
+		if(j < 4){
 			message = text_array[j] + " at this level has " + msg_cost + " I/O cost(s)."
 			cost += " I/O";
 		}else{
@@ -1518,7 +1559,7 @@ function lsh_table_cost(){
 
 		span_tmp.setAttribute("data-tooltip",message);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
-		if(j != 4){
+		if(j < 4){
 			p_tmp.setAttribute("style","text-align: center;")
 		}else{
 			p_tmp.setAttribute("style","text-align: center;font-weight:bold");
@@ -2654,20 +2695,49 @@ function AllocateFPR(fpr_type){
 	reset_button_colors("fpr_policy");
 	if(fpr_type == 0){
 		document.getElementById("Even-FPR").style.fontWeight = 'bold';
+		document.getElementById("Even-FPR").style.fontSize = '16px';
 	}else{
 		document.getElementById("Optimal-FPR").style.fontWeight = 'bold';
+		document.getElementById("Optimal-FPR").style.fontSize = '16px';
 	}
 	re_run(event, 'input4');
 }
+
+function getTieringT(){
+	var inputParameters = parseInputTextBoxes('lsm_tree');
+	var N = inputParameters.N;
+	var L = inputParameters.L;
+	var E = inputParameters.E;
+	var mbuffer = inputParameters.mbuffer;
+	var Tmin = 2;
+	var Tmax = Math.pow(N/(mbuffer/E), 1/(L-1));
+	var tmpT;
+	while(Tmax - Tmin > 1e-7){
+		tmpT = (Tmin + Tmax)/2;
+		if((Math.floor(tmpT)-1)*N < Math.floor(mbuffer/E*Math.pow(tmpT, L))){
+			Tmax = tmpT;
+		}else if((Math.floor(tmpT)-1)*N > Math.floor(mbuffer/E*Math.pow(tmpT, L))){
+			Tmin = tmpT;
+		}else{
+			break;
+		}
+	}
+	return Math.ceil(tmpT*10000000)/10000000;
+}
+
 function MergeByLSMTree(lsm_tree_type){
 	document.getElementById("lsm_tree_L").readOnly=false;
 	reset_button_colors("lsm_tree_type");
 	if(lsm_tree_type == 0){
+		//document.getElementById('lsm_tree_T').value = getTieringT();
 		document.getElementById('Tiering').style.fontWeight = 'bold';
+		document.getElementById('Tiering').style.fontSize = '16px';
 	}else if(lsm_tree_type == 1){
 		document.getElementById('Leveling').style.fontWeight = 'bold';
+		document.getElementById('Leveling').style.fontSize = '16px';
 	}else{
 		document.getElementById('Lazy-Leveling').style.fontWeight = 'bold';
+		document.getElementById('Lazy-Leveling').style.fontSize = '16px';
 	}
 	re_run(event, 'input4');
 }
@@ -2678,15 +2748,18 @@ function MergeByLSMBush(lsm_bush_type){
 		document.getElementById("lsm_bush_L").readOnly=true;
 		document.getElementById("lsm_bush_T").readOnly=true;
 		document.getElementById("LL-Bush").style.fontWeight='bold';
+		document.getElementById("LL-Bush").style.fontSize='16px';
 	}else if(lsm_bush_type == 5){
 		document.getElementById("lsm_bush_L").readOnly=false;
 		document.getElementById("lsm_bush_T").readOnly=true;
 		document.getElementById("LSM-Bush").style.fontWeight='bold';
+		document.getElementById("LSM-Bush").style.fontSize='16px';
 	}else{
 		document.getElementById("lsm_bush_L").value = 3;
 		document.getElementById("lsm_bush_L").readOnly=true;
 		document.getElementById("lsm_bush_T").readOnly=true;
 		document.getElementById("3L-Bush").style.fontWeight='bold';
+		document.getElementById("3L-Bush").style.fontSize='16px';
 	}
 	re_run(event, 'input7');
 }

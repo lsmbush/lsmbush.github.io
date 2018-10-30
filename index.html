@@ -423,7 +423,7 @@
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels (L) </span></span>
-                      <input id="lsm_bush_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" />
+                      <input id="lsm_bush_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" onwheel="re_run(event, 'input2')"/>
                     </div>
 
                     <br>
@@ -492,7 +492,7 @@
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon"><span data-tooltip="The specified level number will automatically change the Entry number into the corresponding maximum capacity" data-tooltip-position="bottom"> Levels (L) </span></span>
-                      <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')" />
+                      <input id="lsm_tree_L" type="number" class="form-control" aria-label="Levels" placeholder="Levels" style="text-align:right" onchange="re_run(event, 'input2')"  onwheel="re_run(event, 'input2')"/>
                     </div>
                     <br>
                     <div class="input-group">
@@ -580,13 +580,13 @@
                 <div class="row">
                   <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Existing-point lookup" data-tooltip-position="bottom">
-                      <p>Existing-point Lookup</p>
+                      <p>Point Lookup</p>
                     </span>
                   </div>
                   <div id="lsh_table_existing_point_lookup" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center">
                   </div>
                 </div>
-                <div class="row">
+                <div id="Zero-result-lookup-text-Div" style="display:none" class="row">
                   <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Zero-result lookup" data-tooltip-position="bottom">
                       <p>Zero-result Lookup</p>
@@ -597,7 +597,16 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-7 col-md-7 col-sm-7" style="">
-                    <span data-tooltip="Required Memory of the In-memory Hash Table " data-tooltip-position="bottom">
+                    <span data-tooltip="Required Storage (including obsolete entries) " data-tooltip-position="bottom">
+                      <p style="font-weight:bold">Storage</p>
+                    </span>
+                  </div>
+                  <div id="lsh_table_storage" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center;">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-7 col-md-7 col-sm-7" style="">
+                    <span data-tooltip="Required Memory " data-tooltip-position="bottom">
                       <p style="font-weight:bold">Memory</p>
                     </span>
                   </div>
@@ -651,7 +660,11 @@
                       <p style="text-align: center;font-size:15px">Zero-result Lookup</p>
                     </span>
                   </div> -->
-                  <div id="lsm_bush_zero_result_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+                  <div id="lsm_bush_zero_result_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;display:none">
+                  </div>
+                </div>
+                <div class="row">
+                  <div id="lsm_bush_storage" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;">
                   </div>
                 </div>
                 <div class="row">
@@ -709,7 +722,11 @@
                       <p style="text-align: center;font-size:15px">Zero-result Lookup</p>
                     </span>
                   </div> -->
-                  <div id="lsm_tree_zero_result_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+                  <div id="lsm_tree_zero_result_lookup" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;display:none">
+                  </div>
+                </div>
+                <div class="row">
+                  <div id="lsm_tree_storage" class="col-lg-12 col-md-12 col-sm-12" style="text-align:center;">
                   </div>
                 </div>
                 <div class="row">

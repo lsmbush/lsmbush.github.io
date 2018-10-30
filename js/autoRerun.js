@@ -3,20 +3,20 @@ var timer=null;
 function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E){
   if(lsm_bush_type == 4){
       var L = getLLBushL(N, E, lsm_bush_mbuffer, lsm_bush_K, 2);
-      var lsm_bush_T = getLLBushAccurateT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
+      var lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
       while(lsm_bush_T < 2){
         L -= 1;
         if(L < 3){
           L += 1;
           break;
         }
-        lsm_bush_T = getLLBushAccurateT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
+        lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
       }
       document.getElementById("lsm_bush_L").value = L;
       document.getElementById("lsm_bush_T").value = lsm_bush_T;
   }else if(lsm_bush_type == 5){
       var L = lsm_bush_L;
-      var maxL = Math.ceil(Math.log(Math.log(N*E/lsm_bush_mbuffer)/Math.log(2))/Math.log(2));
+      var maxL = Math.ceil(getLLBushL_baseN(N, E, lsm_bush_mbuffer, lsm_bush_K, lsm_bush_T));
       if(L > maxL){
         document.getElementById("lsm_bush_L").value = maxL;
         alert("L="+L+" is larger than the maximum L="+maxL+" in LSM-bush.")
@@ -24,12 +24,12 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
         L = maxL;
       }
 
-      var lsm_bush_T = getLLBushAccurateT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
+      var lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
       document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
 
   }else if(lsm_bush_type == 6){
     var L = 3;
-    var lsm_bush_T = getLLBushAccurateT(3, N, E, lsm_bush_mbuffer, lsm_bush_K);
+    var lsm_bush_T = getLLBushT(3, N, E, lsm_bush_mbuffer, lsm_bush_K)
     document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
   }
   draw_lsm_graph("lsm_bush");
@@ -37,18 +37,30 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
 
 function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E){
   if(id == 'lsm_tree_L'){
-    var maxL = Math.ceil(Math.log(N*E*(2 - 1)/lsm_tree_mbuffer/2+ 1/lsm_tree_T)/Math.log(2));
-    var T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
-    if(T < 2){
-      alert("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.")
-      console.log("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.");
-      update_lsm_tree('lsm_tree_T', lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E)
+    var T;
+    if(lsm_tree_type == 0){
+      T = getTieringT();
     }else{
-      document.getElementById("lsm_tree_T").value=T;
+      var maxL = Math.ceil(Math.log(N*E/lsm_tree_mbuffer)/Math.log(2));
+      var T = Math.ceil(Math.pow(N*E/lsm_tree_mbuffer, 1/lsm_tree_L)*10000000)/10000000;
+      if(T < 2){
+        alert("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.")
+        console.log("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.");
+        update_lsm_tree('lsm_tree_T', lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E)
+      }
     }
 
+    document.getElementById("lsm_tree_T").value=T;
+
+
   }else{
-    var L = Math.ceil(Math.log(N*E*(lsm_tree_T - 1)/lsm_tree_mbuffer/lsm_tree_T+ 1/lsm_tree_T)/Math.log(lsm_tree_T));
+    var L;
+    if(lsm_tree_type == 0){
+      L = Math.ceil(Math.log((Math.floor(lsm_tree_T)- 1)*N*E/lsm_tree_mbuffer)/Math.log(lsm_tree_T))
+    }else{
+      L = Math.ceil(Math.log(N*E/lsm_tree_mbuffer)/Math.log(lsm_tree_T))
+    }
+
     if(L < 0){
       L = 0;
     }
@@ -100,6 +112,12 @@ function re_run(e) {
     var r=parseFloat(document.getElementById("r").value);
     var v=parseFloat(document.getElementById("v").value);
     var qL=parseFloat(document.getElementById("qL").value);
+
+    if(r <= 0.0){
+      document.getElementById("Zero-result-lookup-text-Div").style.display='none';
+    }else{
+      document.getElementById("Zero-result-lookup-text-Div").style.display='';
+    }
 
     document.getElementById("data_size_text").innerText=formatBytes(N*E,1);
     document.getElementById("E_text").innerText = E;

@@ -1,6 +1,8 @@
 var timer=null;
 
 function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E){
+  var maxL = Math.ceil(getLLBushL_baseN(N, E, lsm_bush_mbuffer, lsm_bush_K, 2));
+  document.getElementById("LSM-Bush").setAttribute("data-tooltip","LSM-bush merges newer data more lazily by gathering more runs at smaller levels before merging them. For this configuration, it can be tuned with 3 to "+maxL+" levels. ");
   if(lsm_bush_type == 4){
       var L = getLLBushL(N, E, lsm_bush_mbuffer, lsm_bush_K, 2);
       var lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
@@ -16,7 +18,6 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
       document.getElementById("lsm_bush_T").value = lsm_bush_T;
   }else if(lsm_bush_type == 5){
       var L = lsm_bush_L;
-      var maxL = Math.ceil(getLLBushL_baseN(N, E, lsm_bush_mbuffer, lsm_bush_K, lsm_bush_T));
       if(L > maxL){
         document.getElementById("lsm_bush_L").value = maxL;
         alert("L="+L+" is larger than the maximum L="+maxL+" in LSM-bush.")

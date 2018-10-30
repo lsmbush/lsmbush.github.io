@@ -249,7 +249,7 @@
                 </p>
                 <br>
                 <p>
-                Dataset: The default dataset consists of <span id="data_size_text">1 TB</span> of data comprising <span id="E_text">16</span>-byte key-value pairs of <span id="key_size_text">8</span>-byte keys. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="cursor:pointer;text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
+                Dataset: The dataset consists of <span id="data_size_text">1 TB</span> of data comprising unique <span id="E_text">16</span>-byte key-value pairs of <span id="key_size_text">8</span>-byte keys. To edit the default dataset, click <span id="dataset-trigger" data-tooltip="click here to edit the default dataset" data-tooltip-position="bottom" style="cursor:pointer;text-decoration:underline;" onclick="showDataset()"><b>here</b></span>.
                 </p>
                 <div id="dataset-setting" class="row" style="display:none">
                   <div class="row">
@@ -322,7 +322,7 @@
                     <h4 style="text-align: center">Workload</h4>
                   </div>
                   <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center"> Write</div>
+                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;font-size:21px"> Write</div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Write" data-tooltip-position="bottom"> Proportion of Write </span></span>
@@ -332,7 +332,7 @@
                   </div>
                   <br>
                   <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center"> Range Lookup </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;font-size:21px"> Range Lookup </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Range Lookup Operation" data-tooltip-position="bottom"> Proportion of  Range Lookup  </span></span>
@@ -348,7 +348,7 @@
                   </div>
                   <br>
                   <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center"> Point Lookup </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;font-size:21px"> Point Lookup </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Existig Point Lookup Operation" data-tooltip-position="bottom"> Proportion of Existig Point Lookup </span></span>
@@ -384,7 +384,7 @@
                     </div>
                     <br>
                     <div class="input-group">
-                    <span class="input-group-addon"><span data-tooltip="the percentage of obsolete entries to trigger LSH-Table's garbage collection (e.g., 0.5)." data-tooltip-position="bottom"> Garbage Collection Threshold </span></span>
+                    <span class="input-group-addon"><span data-tooltip="The fraction of obsolete entries at which point garbage-collection is triggered  (e.g., 0.5)." data-tooltip-position="bottom"> Garbage Collection Threshold </span></span>
                       <input id="lsh_table_gc_threshold" type="text" class="form-control" aria-label="threshold for garbage collection" placeholder="The threshold ratio in (0,1) for garbage collection (e.g., 0.5)" style="text-align:right" onchange="re_run(event, 'input4')"/>
                     </div>
 
@@ -411,9 +411,9 @@
                     <br>
                     <div id="LSM-Bush Merge Policy" class="input-group">
                       <span class="input-group-addon" style="text-align: left;"><span data-tooltip="With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
-                      <span class="input-group-addon"><span id="3L-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(6)" style="cursor:pointer">3L-Bush &nbsp;</span></span>
-                      <span class="input-group-addon"><span id="LSM-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(5)" style="cursor:pointer">LSM-Bush &nbsp;</span></span>
-                      <span class="input-group-addon"><span id="LL-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(4)" style="cursor:pointer">LL-Bush &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="3L-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(6)" data-tooltip="3L-bush is the most write-optimized instance of LSM-bush" data-tooltip-position="bottom" style="cursor:pointer">3L-Bush &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="LSM-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(5)" data-tooltip="LSM-bush merges newer data more lazily by gathering more runs at smaller levels before merging them. For this configuration, it can be tuned with 3 to 6 levels. " data-tooltip-position="bottom"  style="cursor:pointer">LSM-Bush &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="LL-Bush" name="lsm_bush_type" onclick="MergeByLSMBush(4)" data-tooltip="LL-bush is the most read-optimized instance of LSM-bush " data-tooltip-position="bottom"  style="cursor:pointer">LL-Bush &nbsp;</span></span>
 
                       <!-- <span class="input-group-addon"> 3L-Bush &nbsp;<input id="3L-Bush" name="lsm_bush_type" type="radio" aria-label="3L-Bush" value="6" checked="false" onchange="MergeBy3LBush()"> </input></span>
                       <span class="input-group-addon">LSM-Bush &nbsp;<input id="LSM-Bush" name="lsm_bush_type" type="radio" aria-label="LSM-Bush" value="5" checked="false" onchange="MergeByLSMBush()"/></span>
@@ -474,9 +474,9 @@
                     <br>
                     <div id="LSM-Tree Merge Policy" class="input-group">
                     <span class="input-group-addon" style="text-align: left;"><span data-tooltip="Merge Policies: With leveling each level has one run, and with tiering each level has (up to) size_ratio-1 runs. For lazy leveling, the largest level has only one run while the rest levels have (up to) size_ratio-1 runs." data-tooltip-position="bottom" > Merge </span></span>
-                    <span class="input-group-addon"><span id="Leveling" name="lsm_tree_type" onclick="MergeByLSMTree(1)" style="cursor:pointer">Leveling &nbsp;</span></span>
-                    <span class="input-group-addon"><span id="Tiering" name="lsm_tree_type" onclick="MergeByLSMTree(0)" style="cursor:pointer" >Tiering &nbsp;</span></span>
-                    <span class="input-group-addon"><span id="Lazy-Leveling" name="lsm_tree_type" onclick="MergeByLSMTree(2)" style="cursor:pointer">Lazy Leveling &nbsp;</span></span>
+                    <span class="input-group-addon"><span id="Leveling" name="lsm_tree_type" onclick="MergeByLSMTree(1)" data-tooltip="With leveling, a merge operation takes place at a level as soon as a new run comes in. " data-tooltip-position="bottom" style="cursor:pointer">Leveling &nbsp;</span></span>
+                    <span class="input-group-addon"><span id="Tiering" name="lsm_tree_type" onclick="MergeByLSMTree(0)" data-tooltip=" With tiering, runs can accumulate at level and they only get merged when the level reaches capacity. Warning: this policy can lead to high space-amplification as potentially many obsolete entries can accumulate at the largest level.  " data-tooltip-position="bottom" style="cursor:pointer" >Tiering &nbsp;</span></span>
+                    <span class="input-group-addon"><span id="Lazy-Leveling" name="lsm_tree_type" onclick="MergeByLSMTree(2)" data-tooltip="Lazy leveling applies greedy merging at the largest level and lazy merging at all other levels. " data-tooltip-position="bottom" style="cursor:pointer">Lazy Leveling &nbsp;</span></span>
                       <!-- <span class="input-group-addon">leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="level" value="1" checked="true" onchange="MergeNotyFliudLSMTree()"/></span>
                       <span class="input-group-addon">tiering&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="tier" value="0" onchange="MergeNotyFliudLSMTree()"/></span>
                       <span class="input-group-addon">lazy leveling&nbsp;<input id="lsm_tree_type" name="lsm_tree_type" type="radio" aria-label="lazylevel" value="2" checked="false" onchange="MergeNotyFliudLSMTree()"/></span> -->
@@ -749,6 +749,7 @@
                 </div>
               </div>
             </div>
+            <br>
 
 
 

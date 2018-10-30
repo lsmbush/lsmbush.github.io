@@ -848,7 +848,7 @@ function initScenario1(){
 function initScenario2(){
 	// LSM-bush
 	document.getElementById("lsm_bush_mbuffer").value=2; //in MB
-	document.getElementById("lsm_bush_L").readOnly=true;
+	//document.getElementById("lsm_bush_L").readOnly=true;
 	document.getElementById("lsm_bush_L").value=3;
 	document.getElementById("lsm_bush_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_bush_mfilter_per_entry").value= 10 // bits per element
@@ -926,8 +926,7 @@ function scenario1()
 		hash_table_img.setAttribute("style","width:60px;");
 		hash_table_img.src='./images/hash_table.png';
 		div_col1.appendChild(hash_table_img);
-		div_col1.setAttribute("data-tooltip","All entries are kept in the hashing table. The allocated memory for hashing table is " + formatBytes(
-			N*key_size, 1) + ".");
+		div_col1.setAttribute("data-tooltip","The hash table contains all unique keys and takes up " + formatBytes(N*key_size, 1) + ".");
 		div_col1.setAttribute("data-tooltip-position","top");
 		div_row1.appendChild(div_col1);
 		var div_col2 = document.createElement("div");
@@ -937,7 +936,7 @@ function scenario1()
 		buffer_img.setAttribute("style","width:60px;");
 		buffer_img.src='./images/buffer.png';
 		div_col2.appendChild(buffer_img);
-		div_col2.setAttribute("data-tooltip","Buffer Level contains " + numberWithCommas(Math.floor(mbuffer/E)) + " entries.");
+		div_col2.setAttribute("data-tooltip","The buffer takes up " + numberWithCommas(mbuffer) + ".");
 		div_col2.setAttribute("data-tooltip-position","top");
 		div_row1.appendChild(div_col2);
 
@@ -949,7 +948,7 @@ function scenario1()
 		div_row2.setAttribute("data-tooltip-position", "left");
 
 		var button=document.createElement("button");
-		button.textContent = "LSH-Table";
+		button.textContent = "log";
 		button.setAttribute("class","lsm_button");
 		button.setAttribute("style","width: 75%; height: 36px");
 		div_row2.appendChild(button);
@@ -1116,7 +1115,7 @@ function draw_lsm_graph(prefix) {
 	var bloom_filter_img = document.createElement("img");
 	bloom_filter_img.setAttribute("class","img-responsive img-centered");
 	bloom_filter_img.setAttribute("style","width:60px;margin-right:10px");
-	div_col1.setAttribute("data-tooltip","The memory allocated for bloom filters across all levels is " + formatBytes(mfilter_bits/8) + ".");
+	div_col1.setAttribute("data-tooltip","The Bloom filters take up " + formatBytes(mfilter_bits/8) + ".");
 	div_col1.setAttribute("data-tooltip-position","top");
 	bloom_filter_img.src='./images/filters.png';
 	div_col1.appendChild(bloom_filter_img);
@@ -1127,7 +1126,7 @@ function draw_lsm_graph(prefix) {
 	buffer_img.setAttribute("style","width:60px;");
 	buffer_img.src='./images/buffer.png';
 	div_col2.appendChild(buffer_img);
-	div_col2.setAttribute("data-tooltip","Buffer Level contains " + numberWithCommas(Math.floor(mbuffer/E)) + " entries.");
+	div_col2.setAttribute("data-tooltip","The buffer takes up " + numberWithCommas(mbuffer) + ".");
 	div_col2.setAttribute("data-tooltip-position","top");
 	var div_col3 = document.createElement("div");
 	div_col3.setAttribute("class","col-sm-4");
@@ -1408,6 +1407,14 @@ function draw_lsm_graph(prefix) {
 			}else{
 				message = "The total cost of " +text_array[j]+ " is "  + formatBytes(msg_cost/8,1) + ".";
 				cost = formatBytes(msg_cost/8,1);
+				if(j == 4){
+					var tmpN = parseInt(document.getElementById("N").value.replace(/\D/g,''),10);
+					var u_filter = tmpN*mfilter_per_entry/8;
+					var u_fence = tmpN/B*key_size;
+					var o_filter = (N-tmpN)*mfilter_per_entry/8;
+					var o_fence = (N-tmpN)/B*key_size;
+					message = "The unique entries require "+ formatBytes(u_filter+u_fence)+ " (" + formatBytes(u_filter)+ " for the Bloom filters and "+ formatBytes(u_fence)+ " for the fence pointers). The obsolete entries require up to "+formatBytes(o_filter+o_fence)+" ("+formatBytes(o_filter)+" for the Bloom filters and "+formatBytes(o_fence)+" for the fence pointers). "
+				}
 			}
 
 			if(threshold_flag){

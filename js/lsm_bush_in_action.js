@@ -1041,28 +1041,29 @@ function draw_lsm_graph(prefix) {
 			}
 
 	    //get BF allocation
-			var mfilter_bits = mfilter_per_entry*N;
-			var tmp_mfilter_bits = mfilter_bits;
+
+			var tmp_mfilter_bits;
 			var filters;
 			var tmpX = X;
+			var tmpN;
 	 		if(leveltier >= 4){
 				// var tmpN = Math.ceil(mbuffer/E*lsm_bush_K*Math.pow(T, Math.pow(2, L - 1) - 1));
 				//tmp_mfilter_bits = tmp_mfilter_bits/N*tmpN;
 				// tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
 				// X = N - tmpN;
 				// N = tmpN;
-				var tmpN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, T);
+				tmpN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, T);
 				X = tmpN - N;
-				tmp_mfilter_bits *= tmpN/N;
+				tmp_mfilter_bits = mfilter_per_entry*tmpN;
 			}else{
 				// var tmpN = mbuffer/E*Math.pow(T, L-1)
 				// tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
 				// N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
 				N *= Z;
-				var tmpN = (T*N - mbuffer/E)/(T-1);
+				tmpN = (T*N - mbuffer/E)/(T-1);
 
 				X = tmpN - N;
-				tmp_mfilter_bits *= tmpN/N;
+				tmp_mfilter_bits = mfilter_per_entry*tmpN;
 			}
 
 			if(isOptimalFPR == 0){
@@ -1070,6 +1071,9 @@ function draw_lsm_graph(prefix) {
 			}else{
 				filters = getMonkeyFPassigment(N, E, mbuffer, T, K, Z, Y, tmp_mfilter_bits, P, leveltier, isOptimalFPR, r, v, X, lsm_bush_K, T);
 			}
+
+			var mfilter_bits = tmp_mfilter_bits;
+			N = tmpN;
 
 			//N = inputParameters.N;
 			// if(leveltier >= 4){

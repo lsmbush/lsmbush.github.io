@@ -44,6 +44,7 @@ function parseInputTextBoxes(prefix="lsm_bush")
 
 		//Workload
 		parsedBoxes.s = parseInt(document.getElementById("s").value.replace(/\D/g,''), 10);
+		parsedBoxes.ui_ratio = parseFloat(document.getElementById("UI-ratio").value);
 		parsedBoxes.w = parseFloat(document.getElementById("w").value);
 		parsedBoxes.r = parseFloat(document.getElementById("r").value);
 		parsedBoxes.v = parseFloat(document.getElementById("v").value);
@@ -160,7 +161,7 @@ function getTotalStorage(i, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, 
 	for(j = 1; j <= L; j++){
 		total += getLeveledStorage(j, initCapacity, E, L, filter_array, N, T, B, Y, K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry);
 	}
-	return total;
+	return total+initCapacity*E*8;
 }
 
 function getLeveledLevel(i, initCapacity, E, L, filter_array, N, T, B,Y,  K, Z, s, Mu, isOptimalFPR, leveltier, LLBushK, LLBushT, key_size, mfence_pointer_per_entry){
@@ -512,14 +513,14 @@ function initFiltersKey(N,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimal
 	if(leveltier < 4){ // origin website algorithm to construct the tree
 		var level = L - 1;
 		if(!filter_array_flag){
-			L = Math.ceil(Math.log(N*E/mbuffer)/Math.log(T));
+			L = Math.ceil(Math.log((N+X)*E*(T-1)/mbuffer + 1)/Math.log(T) - 1);
 			for(var i=0;i<L;i++){
 				var newFilter = new Filter();
 				newFilter.nokeys=0;
 				newFilter.fp=0.0;
 				filter_array.push(newFilter);
 			}
-			level = L - 2;
+			level = L - 1;
 		}
 
 
@@ -558,14 +559,14 @@ function initFiltersKey(N,E,mbuffer,T,K,Z,Y, mfilter_bits,P,leveltier, isOptimal
 
 		var level = L - 1;
 		if(!filter_array_flag){
-			L = getLLBushL_baseN(N, E, mbuffer, LLBushK, LLBushT);
+			L = getLLBushL(N+X, E, mbuffer, LLBushK, LLBushT);
 			for(var i=0;i<L;i++){
 				var newFilter = new Filter();
 				newFilter.nokeys=0;
 				newFilter.fp=0.0;
 				filter_array.push(newFilter);
 			}
-			level = L - 2;
+			level = L - 1;
 		}
 
 
@@ -884,6 +885,7 @@ function init(){
 
 	// Workload
 	document.getElementById("s").value = 8192;
+	document.getElementById("UI-ratio").value = 1;
 	document.getElementById("w").value = 0.5;
 	document.getElementById("r").value = 0.0;
 	document.getElementById("v").value = 0.499999;
@@ -943,12 +945,11 @@ function scenario1()
 		var div_row2=document.createElement("div");
 		div_row2.setAttribute("class","col-sm-12")
 		div_row2.setAttribute("style","text-align: center;height:38px");
-		message = "LSM-Table maintains an in-memory hash table that maps from each key to its corresponding entry in the log."
+		message = "LSM-Table maintains an in-memory hash table that maps from each key to its corresponding entry in the log, which contains " + numberWithCommas(N) + "entries."
 		div_row2.setAttribute("data-tooltip", message);
 		div_row2.setAttribute("data-tooltip-position", "left");
 
 		var button=document.createElement("button");
-		button.textContent = "log";
 		button.setAttribute("class","lsm_button");
 		button.setAttribute("style","width: 75%; height: 36px");
 		div_row2.appendChild(button);
@@ -1023,14 +1024,41 @@ function draw_lsm_graph(prefix) {
 		var qS=inputParameters.qS;
 		var lsm_bush_K=inputParameters.lsm_bush_K;
 		var X=inputParameters.X;
+		var ui_ratio = inputParameters.ui_ratio;
 
+		var tmp_mfilter_bits;
+		var filters;
+		var tmpX = X;
+		var tmpN;
+		if(leveltier >= 4){
+			// var tmpN = Math.ceil(mbuffer/E*lsm_bush_K*Math.pow(T, Math.pow(2, L - 1) - 1));
+			//tmp_mfilter_bits = tmp_mfilter_bits/N*tmpN;
+			// tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
+			// X = N - tmpN;
+			// N = tmpN;
+			maxL = Math.ceil(Math.log(Math.log(N*E/mbuffer/2)/Math.log(T)+1)/Math.log(2));
+			maxN = getLLBushN_baseN(maxL, N, E, mbuffer, lsm_bush_K, T);
+			tmpN = ui_ratio*(maxN - N) + N;
+			X = tmpN - N;
+			tmp_mfilter_bits = mfilter_per_entry*tmpN;
+		}else{
+			// var tmpN = mbuffer/E*Math.pow(T, L-1)
+			// tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
+			// N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
+
+			maxL = Math.ceil(Math.log(N*Z*E/mbuffer)/Math.log(T));
+			maxN = N*Z*(1-1/Math.pow(T, maxL))/(1-1/T)+mbuffer/E;
+			tmpN = ui_ratio*(maxN - N) + N;
+			X = tmpN - N;
+			//N = N*Z;
+			tmp_mfilter_bits = mfilter_per_entry*tmpN;
+		}
 
 			var L;
 			if(leveltier < 4){
-				//L = Math.ceil(Math.log(N*E*(T - 1)/mbuffer/T+ 1/T)/Math.log(T));
-				L = Math.ceil(Math.log(N*Z*E/mbuffer)/Math.log(T));
+				L = Math.ceil(Math.log(tmpN*E*(T - 1)/mbuffer+ 1)/Math.log(T) - 1);
 			}else if(leveltier == 4){
-				L = getLLBushL(N, E, mbuffer, lsm_bush_K, T);
+				L = getLLBushL(tmpN, E, mbuffer, lsm_bush_K, T);
 			}else{
 				L = inputParameters.L;
 			}
@@ -1041,34 +1069,12 @@ function draw_lsm_graph(prefix) {
 
 	    //get BF allocation
 
-			var tmp_mfilter_bits;
-			var filters;
-			var tmpX = X;
-			var tmpN;
-	 		if(leveltier >= 4){
-				// var tmpN = Math.ceil(mbuffer/E*lsm_bush_K*Math.pow(T, Math.pow(2, L - 1) - 1));
-				//tmp_mfilter_bits = tmp_mfilter_bits/N*tmpN;
-				// tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
-				// X = N - tmpN;
-				// N = tmpN;
-				tmpN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, T);
-				X = tmpN - N;
-				tmp_mfilter_bits = mfilter_per_entry*tmpN;
-			}else{
-				// var tmpN = mbuffer/E*Math.pow(T, L-1)
-				// tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
-				// N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
-				N *= Z;
-				tmpN = (T*N - mbuffer/E)/(T-1);
 
-				X = tmpN - N;
-				tmp_mfilter_bits = mfilter_per_entry*tmpN;
-			}
 
 			if(isOptimalFPR == 0){
-				filters = getBaselineFPassigment(N, E, mbuffer, T, K, Z, Y,tmp_mfilter_bits, P, leveltier, X, lsm_bush_K, T);
+				filters = getBaselineFPassigment(0, E, mbuffer, T, K, Z, Y,tmp_mfilter_bits, P, leveltier, tmpN, lsm_bush_K, T);
 			}else{
-				filters = getMonkeyFPassigment(N, E, mbuffer, T, K, Z, Y, tmp_mfilter_bits, P, leveltier, isOptimalFPR, r, v, X, lsm_bush_K, T);
+				filters = getMonkeyFPassigment(0, E, mbuffer, T, K, Z, Y, tmp_mfilter_bits, P, leveltier, isOptimalFPR, r, v, tmpN, lsm_bush_K, T);
 			}
 
 			var mfilter_bits = tmp_mfilter_bits;
@@ -1304,6 +1310,15 @@ function draw_lsm_graph(prefix) {
 											message += "At this level, each run contains "+numberWithCommas(Math.floor(capacity/maxRuns))+" entries.";
 										}
 
+										var fpr = calc_R(filters[i]);
+										if(fpr < 0.00001){
+											message += " False positive rate of this level is " + fpr.toExponential(3) + "."
+										}else{
+											message += " False positive rate of this level is " + (fpr*100).toFixed(3) + "%."
+										}
+
+
+
 
 
 												button.setAttribute("data-tooltip", message);
@@ -1405,7 +1420,7 @@ function draw_lsm_graph(prefix) {
 				message = "The total cost of " +text_array[j]+ " is " + 	msg_cost + " I/O(s)."
 				cost += " I/O"
 			}else{
-				message = "The total cost of " +text_array[j]+ " is "  + formatBytes(msg_cost/8,1) + ".";
+				message = "The total cost of " +text_array[j]+ " is "  + formatBytes(msg_cost/8,3) + ".";
 				cost = formatBytes(msg_cost/8,1);
 				if(j == 4){
 					var tmpN = parseInt(document.getElementById("N").value.replace(/\D/g,''),10);
@@ -1722,19 +1737,24 @@ function getLLBushAccurateT(L, N, E, mbuffer, LLBushK){
 		}
 		return sum;
 	}
+
 	var baseNmax = N/(1+1/LLBushK);;
 	var baseNmin = N/(1+2/LLBushK);
 
 	var Tmin = getLLBushT(L, baseNmin, E, mbuffer, LLBushK);
 	var Tmax = getLLBushT(L, baseNmax, E, mbuffer, LLBushK);
-	while(Tmin != Tmax){
+	while(Math.abs(Tmin - Tmax) > 5e-7){
 		baseNmax = N/(1+ 1/LLBushK*getSumOfProgression(Tmax, L));
 		Tmax = getLLBushT(L, baseNmax, E, mbuffer, LLBushK);
 
 		baseNmin = N/(1+ 1/LLBushK*getSumOfProgression(Tmin, L));
 		Tmin = getLLBushT(L, baseNmin, E, mbuffer, LLBushK);
 	}
-	return (Tmin+Tmax)/2;
+	var finalT = (Tmin+Tmax)/2;
+	if(Math.abs(finalT - Math.round(finalT)) < 5e-7){
+		finalT = Math.round(finalT);
+	}
+	return finalT;
 }
 
 function getLLBushN(L, E, mbuffer, LLBushK, LLBushT){
@@ -1751,7 +1771,7 @@ function getLLBushN(L, E, mbuffer, LLBushK, LLBushT){
 function getLLBushN_baseN(L, N, E, mbuffer, LLBushK, LLBushT){
 	var sum = N + N/LLBushK;
 	var previous = N/LLBushK;
-	for(var i=L-2;i>=1;i--){
+	for(var i=L-1;i>=1;i--){
 		previous /= Math.pow(LLBushT,Math.pow(2, L-i-1));
 		sum += previous;
 	}
@@ -2714,26 +2734,35 @@ function AllocateFPR(fpr_type){
 	re_run(event, 'input4');
 }
 
-function getTieringT(){
+function getLSMTreeT(lsm_tree_type){
 	var inputParameters = parseInputTextBoxes('lsm_tree');
+	var ui_ratio = inputParameters.ui_ratio;
 	var N = inputParameters.N;
 	var L = inputParameters.L;
 	var E = inputParameters.E;
 	var mbuffer = inputParameters.mbuffer;
 	var Tmin = 2;
-	var Tmax = Math.pow(N/(mbuffer/E), 1/(L-1));
+	var Tmax = Math.pow(N/(mbuffer/E), 1/L);
 	var tmpT;
+	var amp = function(x){return 1;};
+	if(lsm_tree_type == 0){
+		amp = function(x){return Math.floor(x)-1;}
+	}
 	while(Tmax - Tmin > 1e-7){
 		tmpT = (Tmin + Tmax)/2;
-		if((Math.floor(tmpT)-1)*N < Math.floor(mbuffer/E*Math.pow(tmpT, L))){
+		tmpN = ui_ratio*((1 - 1/(Math.pow(tmpT, L)))/(1 - 1/tmpT)*N*amp(tmpT) - N)+N;
+		tmpL = Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT);
+		if(tmpL < L){
 			Tmax = tmpT;
-		}else if((Math.floor(tmpT)-1)*N > Math.floor(mbuffer/E*Math.pow(tmpT, L))){
+		}else if(tmpL > L){
 			Tmin = tmpT;
 		}else{
 			break;
 		}
 	}
-	return Math.ceil(tmpT*10000000)/10000000;
+	tmpN = ui_ratio*((1 - 1/(Math.pow(tmpT, L)))/(1 - 1/tmpT)*N*amp(tmpT) - N)+N;
+	var maxL = Math.ceil(Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT));
+	return [Math.ceil(tmpT*10000000)/10000000, maxL];
 }
 
 function MergeByLSMTree(lsm_tree_type){

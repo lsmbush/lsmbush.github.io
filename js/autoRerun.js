@@ -1,18 +1,31 @@
 var timer=null;
 
-function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E){
-  var maxL = Math.ceil(getLLBushL_baseN(N, E, lsm_bush_mbuffer, lsm_bush_K, 2));
+function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E, ui_ratio){
+  var tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, lsm_bush_L-1)-1));
+  if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
+    tmpT = Math.round(tmpT);
+  }
+  var maxN = getLLBushN_baseN(lsm_bush_L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT);
+  var tmpN = N + ui_ratio*(maxN - N);
+  var maxL = Math.ceil(Math.log(Math.log(N*E/lsm_bush_mbuffer/2)/Math.log(2)+1)/Math.log(2)+1);
   document.getElementById("LSM-Bush").setAttribute("data-tooltip","LSM-bush merges newer data more lazily by gathering more runs at smaller levels before merging them. For this configuration, it can be tuned with 3 to "+maxL+" levels. ");
   if(lsm_bush_type == 4){
-      var L = getLLBushL(N, E, lsm_bush_mbuffer, lsm_bush_K, 2);
-      var lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
+      var L = getLLBushL(tmpN, E, lsm_bush_mbuffer, lsm_bush_K, 2);
+      tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L)-1));
+      tmpN = N + ui_ratio*(getLLBushN_baseN(L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT) - N);
+      var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
       while(lsm_bush_T < 2){
         L -= 1;
         if(L < 3){
           L += 1;
           break;
         }
-        lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
+        tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
+        if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
+          tmpT = Math.round(tmpT);
+        }
+        tmpN = N + ui_ratio*(getLLBushN_baseN(L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT) - N);
+        lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
       }
       document.getElementById("lsm_bush_L").value = L;
       document.getElementById("lsm_bush_T").value = lsm_bush_T;
@@ -24,31 +37,37 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
         console.log("L="+L+" is larger than the maximum L="+maxL+" in LSM-bush.");
         L = maxL;
       }
-
-      var lsm_bush_T = getLLBushT(L, N, E, lsm_bush_mbuffer, lsm_bush_K);
+      var tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
+      if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
+        tmpT = Math.round(tmpT);
+      }
+      var tmpN = N + ui_ratio*(getLLBushN_baseN(L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT) - N);
+      var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K, ui_ratio);
       document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
 
   }else if(lsm_bush_type == 6){
     var L = 3;
-    var lsm_bush_T = getLLBushT(3, N, E, lsm_bush_mbuffer, lsm_bush_K)
+    var tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
+    if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
+      tmpT = Math.round(tmpT);
+    }
+    var tmpN = N + ui_ratio*(getLLBushN_baseN(L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT) - N);
+    var lsm_bush_T = getLLBushAccurateT(3, tmpN, E, lsm_bush_mbuffer, lsm_bush_K)
     document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
   }
   draw_lsm_graph("lsm_bush");
 }
 
-function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E){
-  if(id == 'lsm_tree_L'){
-    var T;
-    if(lsm_tree_type == 0){
-      T = getTieringT();
-    }else{
-      var maxL = Math.ceil(Math.log(N*E/lsm_tree_mbuffer)/Math.log(2));
-      var T = Math.ceil(Math.pow(N*E/lsm_tree_mbuffer, 1/lsm_tree_L)*10000000)/10000000;
+function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E, ui_ratio){
+  if(id == 'lsm_tree_L' || id == 'UI-ratio'){
+    var result = getLSMTreeT(lsm_tree_type);
+    var T = result[0];
+    var maxL = result[1];
       if(T < 2){
         alert("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.")
         console.log("L="+lsm_tree_L+" is larger than the maximum L="+maxL+" in LSM-tree.");
         update_lsm_tree('lsm_tree_T', lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E)
-      }
+
     }
 
     document.getElementById("lsm_tree_T").value=T;
@@ -57,9 +76,27 @@ function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbu
   }else{
     var L;
     if(lsm_tree_type == 0){
-      L = Math.ceil(Math.log((Math.floor(lsm_tree_T)- 1)*N*E/lsm_tree_mbuffer)/Math.log(lsm_tree_T))
+      L = Math.log(N*Math.floor(lsm_tree_T-1)*E/lsm_tree_mbuffer)/Math.log(lsm_tree_T);
     }else{
-      L = Math.ceil(Math.log(N*E/lsm_tree_mbuffer)/Math.log(lsm_tree_T))
+      L = Math.log(N*E/lsm_tree_mbuffer)/Math.log(lsm_tree_T);
+    }
+
+    if(Math.abs(L - Math.round(L))<1e-6){
+      L = Math.round(L);
+    }else{
+      L = Math.ceil(L);
+    }
+    var tmpN;
+    if(lsm_tree_type == 0){
+      tmpN = ui_ratio*((1 - 1/Math.pow(lsm_tree_T, L))/(1 - 1/lsm_tree_T)*N*(Math.floor(lsm_tree_T)-1) + lsm_tree_mbuffer/E - N)+N;
+    }else{
+      tmpN = ui_ratio*((1 - 1/Math.pow(lsm_tree_T, L))/(1 - 1/lsm_tree_T)*N + lsm_tree_mbuffer/E - N) + N;
+    }
+    L = Math.log(tmpN*E*(lsm_tree_T-1)/lsm_tree_mbuffer+1)/Math.log(lsm_tree_T)-1;
+    if(Math.abs(L - Math.round(L))<1e-6){
+      L = Math.round(L);
+    }else{
+      L = Math.ceil(L);
     }
 
     if(L < 0){
@@ -113,6 +150,19 @@ function re_run(e) {
     var r=parseFloat(document.getElementById("r").value);
     var v=parseFloat(document.getElementById("v").value);
     var qL=parseFloat(document.getElementById("qL").value);
+
+    var ui_ratio_str = document.getElementById("UI-ratio").value;
+    if(isNaN(ui_ratio_str)){
+      alert(ui_ratio_str+" is not valid.")
+      console.log("UI ratio is not valid: "+ui_ratio_str)
+      document.getElementById("UI-ratio").value=1.0;
+    }
+    var ui_ratio = parseFloat(ui_ratio_str);
+    if(ui_ratio > 1 || ui_ratio < 0){
+      alert(ui_ratio+" should be in the range of [0, 1].")
+      console.log("UI ratio should be in the range of (0, 1) :"+key_size)
+      document.getElementById("UI-ratio").value=1.0;
+    }
 
     if(r <= 0.0){
       document.getElementById("Zero-result-lookup-text-Div").style.display='none';
@@ -179,8 +229,15 @@ function re_run(e) {
     if(isNaN(L)){
       alert("LSM-Tree Level="+L+" is invalid.")
       console.log("LSM-Tree level is invalid: "+L);
-      document.getElementById("lsm_tree_L").value = 6;
-      lsm_tree_L = 6;
+      var tmpN;
+      if(lsm_tree_type == 0){
+        tmpN = ui_ratio*((1 - 1/lsm_tree_T)/(1 - 1/(Math.pow(lsm_tree_T, L)))*N*(Math.floor(lsm_tree_T)-1) - N)+N;
+      }else{
+        tmpN = ui_ratio*((1 - 1/lsm_tree_T)/(1 - 1/(Math.pow(lsm_tree_T, L)))*N - N) + N;
+      }
+      L = Math.ceil(Math.log(tmpN*E*(lsm_tree_T-1)/lsm_tree_mbuffer+1/lsm_tree_T)/Math.log(lsm_tree_T))
+      document.getElementById("lsm_tree_L").value = L;
+      lsm_tree_L = L;
     }
     lsm_tree_L = parseInt(L);
     if(lsm_tree_L < 0){
@@ -207,7 +264,7 @@ function re_run(e) {
     if(isNaN(lsm_tree_T)){
       alert("LSM-Tree T="+lsm_tree_T+" is invalid.")
       console.log("LSM-Tree size ratio is invalid: "+lsm_tree_T);
-      lsm_tree_T = calc_T(N, lsm_tree_mbuffer, E, lsm_tree_L, 10000001);
+      lsm_tree_T = getLSMTreeT(lsm_tree_type);
       document.getElementById("lsm_tree_T").value = lsm_tree_T;
     }
     lsm_tree_T = parseFloat(lsm_tree_T);
@@ -218,7 +275,7 @@ function re_run(e) {
         lsm_tree_T = 2;
     }
     var lsm_tree_type=getBoldButtonByName("lsm_tree_type");
-    update_lsm_tree(event.target.id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E);
+    update_lsm_tree(event.target.id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E, ui_ratio);
 
 
     // lsm bush
@@ -250,7 +307,10 @@ function re_run(e) {
     if(isNaN(lsm_bush_L)){
       alert("LSM-Bush Level="+lsm_bush_L+" is invalid.")
       console.log("LSM-Bush Level is invalid: "+Level);
-      lsm_bush_L = getLLBushL(N, E, lsm_bush_mbuffer, lsm_bush_K, lsm_bush_T);
+      var maxL = Math.ceil(Math.log(Math.log(N*E/lsm_bush_mbuffer/2)/Math.log(lsm_tree_T)+1)/Math.log(2));
+      var maxN = getLLBushN_baseN(maxL, N, E, lsm_bush_mbuffer, lsm_bush_K, lsm_tree_T);
+      var tmpN = N + ui_ratio*(maxN - N);
+      lsm_bush_L = getLLBushL(tmpN, E, lsm_bush_mbuffer, lsm_bush_K, lsm_bush_T);
       document.getElementById("lsm_bush_L").value = lsm_bush_L;
     }
     lsm_bush_L = parseInt(lsm_bush_L);
@@ -265,7 +325,7 @@ function re_run(e) {
     var lsm_bush_type = getBoldButtonByName("lsm_bush_type");
     re_run_now();
 
-    update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E);
+    update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E, ui_ratio);
 
 }
 

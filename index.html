@@ -319,49 +319,48 @@
                 </p>
                 <div id="workload-setting" class="row" style="display:none">
                   <div class="row">
-                    <h4 style="text-align: center">Workload</h4>
+                    <div class="col-lg-4 col-md-4 col-sm-4"> <h4>Write</h4></div>
+                    <div class="col-lg-4 col-md-4 col-sm-4"> <h4>Range Lookup</h4> </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4"> <h4>Point Lookup</h4> </div>
                   </div>
                   <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;font-size:21px"> Write</div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Write" data-tooltip-position="bottom"> Proportion of Write </span></span>
                         <input id="w" type="text" class="form-control" aria-label="proportion of write operation" placeholder=" w (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
                       </div>
+                      <br>
+                      <div class="input-group">
+                        <span class="input-group-addon"><span data-tooltip="Update/Insert ratio" data-tooltip-position="bottom"> Update/Insert ratio </span></span>
+                        <input id="UI-ratio" type="text" class="form-control" aria-label="Update/Insert ratio" placeholder=" ui_ratio (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
+                      </div>
                     </div>
-                  </div>
-                  <br>
-                  <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;font-size:21px"> Range Lookup </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Range Lookup Operation" data-tooltip-position="bottom"> Proportion of  Range Lookup  </span></span>
                         <input id="qL" type="text" class="form-control" aria-label="proportion of range lookup operation" placeholder=" qL (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
                       </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <br>
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="The number of unique entries in the target key range" data-tooltip-position="bottom"> Target Range Size </span></span>
                         <input id="s" type="number" class="form-control" aria-label="Proportion" placeholder=" s (e.g., 2048)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')"/>
                       </div>
                     </div>
-                  </div>
-                  <br>
-                  <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" style="text-align: center;font-size:21px"> Point Lookup </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Existig Point Lookup Operation" data-tooltip-position="bottom"> Proportion of Existig Point Lookup </span></span>
                         <input id="v" type="text" class="form-control" aria-label="proportion of existing point lookup operation" placeholder=" v (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
                       </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4">
+                      <br>
                       <div class="input-group">
                         <span class="input-group-addon"><span data-tooltip="Proportion of Non-result Point Lookup Operation" data-tooltip-position="bottom"> Proportion of Non-result Point Lookup </span></span>
                         <input id="r" type="text" class="form-control" aria-label="proportion of non-result point lookup operation" placeholder=" r (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
                       </div>
                     </div>
                   </div>
+
+
+
                 </div>
 
             </div>

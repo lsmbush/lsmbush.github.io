@@ -37,12 +37,7 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
         console.log("L="+L+" is larger than the maximum L="+maxL+" in LSM-bush.");
         L = maxL;
       }
-      var tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
-      if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
-        tmpT = Math.round(tmpT);
-      }
-      var tmpN = N + ui_ratio*(getLLBushN_baseN(L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT) - N);
-      var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K, ui_ratio);
+      var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
       document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
 
   }else if(lsm_bush_type == 6){

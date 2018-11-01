@@ -1036,8 +1036,8 @@ function draw_lsm_graph(prefix) {
 			// tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
 			// X = N - tmpN;
 			// N = tmpN;
-			maxL = Math.ceil(Math.log(Math.log(N*E/mbuffer/2)/Math.log(T)+1)/Math.log(2));
-			maxN = getLLBushN_baseN(maxL, N, E, mbuffer, lsm_bush_K, T);
+			maxT = Math.pow(N*E/mbuffer/2, 1/(Math.pow(2, L-1) - 1));
+			maxN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, maxT);
 			tmpN = ui_ratio*(maxN - N) + N;
 			X = tmpN - N;
 			tmp_mfilter_bits = mfilter_per_entry*tmpN;
@@ -1045,9 +1045,9 @@ function draw_lsm_graph(prefix) {
 			// var tmpN = mbuffer/E*Math.pow(T, L-1)
 			// tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
 			// N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
-
-			maxL = Math.ceil(Math.log(N*Z*E/mbuffer)/Math.log(T));
-			maxN = N*Z*(1-1/Math.pow(T, maxL))/(1-1/T)+mbuffer/E;
+			L = inputParameters.L;
+			maxT = Math.pow((N*Z*E/mbuffer),1/L);
+			maxN = N*Z*(1-1/Math.pow(maxT, L+1))/(1-1/maxT);
 			tmpN = ui_ratio*(maxN - N) + N;
 			X = tmpN - N;
 			//N = N*Z;
@@ -1439,7 +1439,7 @@ function draw_lsm_graph(prefix) {
 			p_tmp.textContent=(cost+"")
 			span_tmp.setAttribute("data-tooltip",message);
 			span_tmp.setAttribute("data-tooltip-position","bottom")
-			if(j < 4){
+			if(j != 4){
 				p_tmp.setAttribute("style","text-align: center;")
 			}else{
 				p_tmp.setAttribute("style","text-align: center;font-weight:bold");
@@ -1482,6 +1482,7 @@ function lsh_table_cost(){
 	var N = inputParameters.N;
 	var P = inputParameters.P;
 	var E = inputParameters.E;
+	var ui_ratio = inputParameters.ui_ratio;
 	var B = P/E;
 	var key_size=inputParameters.key_size;
 	var hash_table_gc_threshold=inputParameters.hash_table_gc_threshold;
@@ -1509,7 +1510,7 @@ function lsh_table_cost(){
 		"1",
 		"0",
 		N*key_size*8,
-		N*E*8*(1+hash_table_gc_threshold)
+		N*E*8*(1+ui_ratio*hash_table_gc_threshold)
 	];
 
 	var sum=r+qL+v+w;
@@ -1585,7 +1586,7 @@ function lsh_table_cost(){
 
 		span_tmp.setAttribute("data-tooltip",message);
 		span_tmp.setAttribute("data-tooltip-position","bottom")
-		if(j < 4){
+		if(j != 4){
 			p_tmp.setAttribute("style","text-align: center;")
 		}else{
 			p_tmp.setAttribute("style","text-align: center;font-weight:bold");
@@ -2740,18 +2741,20 @@ function getLSMTreeT(lsm_tree_type){
 	var N = inputParameters.N;
 	var L = inputParameters.L;
 	var E = inputParameters.E;
+	var Z = inputParameters.fluidZ;
 	var mbuffer = inputParameters.mbuffer;
 	var Tmin = 2;
-	var Tmax = Math.pow(N/(mbuffer/E), 1/L);
+	var Tmax = Math.pow(N*Z/(mbuffer/E), 1/L);
+	var maxN = N*Z*(1-1/Math.pow(Tmax, L+1))/(1-1/Tmax);
+	var tmpN = ui_ratio*(maxN - N) + N;
 	var tmpT;
 	var amp = function(x){return 1;};
 	if(lsm_tree_type == 0){
 		amp = function(x){return Math.floor(x)-1;}
 	}
-	while(Tmax - Tmin > 1e-7){
+	while(Tmax - Tmin > 1e-8){
 		tmpT = (Tmin + Tmax)/2;
-		tmpN = ui_ratio*((1 - 1/(Math.pow(tmpT, L)))/(1 - 1/tmpT)*N*amp(tmpT) - N)+N;
-		tmpL = Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT);
+		tmpL = Math.log(tmpN*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
 		if(tmpL < L){
 			Tmax = tmpT;
 		}else if(tmpL > L){
@@ -2760,7 +2763,6 @@ function getLSMTreeT(lsm_tree_type){
 			break;
 		}
 	}
-	tmpN = ui_ratio*((1 - 1/(Math.pow(tmpT, L)))/(1 - 1/tmpT)*N*amp(tmpT) - N)+N;
 	var maxL = Math.ceil(Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT));
 	return [Math.ceil(tmpT*10000000)/10000000, maxL];
 }

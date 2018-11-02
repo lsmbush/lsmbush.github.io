@@ -331,7 +331,7 @@
                       </div>
                       <br>
                       <div class="input-group">
-                        <span class="input-group-addon"><span data-tooltip="Update/Insert ratio" data-tooltip-position="bottom"> Update/Insert ratio </span></span>
+                        <span class="input-group-addon"><span data-tooltip="This parameter controls the balance between updates vs. insertions among writes in the workload. When set to 0, there only insertions and so all existing entries are unique. When set to 1, there are only updates, and this leads to the highest possible number of obsolete entries in each of the structures. This parameter can assume any value between 0 and 1 to show the resulting space-amplification arising from different balances between inserts and updates" data-tooltip-position="bottom"> Obsolescence Coefficient </span></span>
                         <input id="UI-ratio" type="text" class="form-control" aria-label="Update/Insert ratio" placeholder=" ui_ratio (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
                       </div>
                     </div>
@@ -378,8 +378,8 @@
                             <a id="scenario1" class="btn btn-default btn-params" type="button" onclick="initScenario1(event)"><span data-tooltip="Using the default LSH-Table configuration." data-tooltip-position="bottom" style="text-decoration:underline; text-decoration-style: dotted;">LSH-Table</span></a>
                         </span>
                     </div> -->
-                    <div class="row">
-                      <h4 style="text-align: center">LSH-Table</h4>
+                    <div class="row" style="text-align: center">
+                      <h4 data-tooltip="Log-Structured Hash-Table" data-tooltip-position="bottom" >LSH-Table</h4>
                     </div>
                     <br>
                     <div class="input-group">
@@ -404,8 +404,8 @@
                             <a id="scenario2" class="btn btn-default btn-params" type="button" onclick="initScenario2(event)"><span data-tooltip="Using the default LSM-Bush configuration." data-tooltip-position="bottom" style="text-decoration:underline; text-decoration-style: dotted;">LSM-Bush</span></a>
                         </span>
                     </div> -->
-                    <div class="row">
-                      <h4 style="text-align: center">LSM-Bush</h4>
+                    <div class="row" style="text-align: center">
+                      <h4 data-tooltip="Log-Structured Merge-Bush" data-tooltip-position="bottom">LSM-Bush</h4>
                     </div>
                     <br>
                     <div id="LSM-Bush Merge Policy" class="input-group">
@@ -467,8 +467,8 @@
                             <a id="scenario3" class="btn btn-default btn-params" type="button" onclick="initScenario3(event)"><span data-tooltip="Using the default LSM-Tree configuration." data-tooltip-position="bottom" style="text-decoration:underline; text-decoration-style: dotted;">LSM-Tree</span></a>
                         </span>
                     </div> -->
-                    <div class="row">
-                      <h4 style="text-align: center">LSM-Tree</h4>
+                    <div class="row" style="text-align: center">
+                      <h4 data-tooltip="Log-Structured Merge-Tree" data-tooltip-position="bottom">LSM-Tree</h4>
                     </div>
                     <br>
                     <div id="LSM-Tree Merge Policy" class="input-group">
@@ -496,8 +496,8 @@
                     <br>
                     <div class="input-group">
                       <span class="input-group-addon" style="text-align: left;"><span data-tooltip="False Positive Rate Allocation Policy" data-tooltip-position="bottom" > FPR Allocation </span></span>
-                      <span class="input-group-addon"><span id="Even-FPR" name="fpr_policy" data-tooltip="Distribute the memory evenly to each level" data-tooltip-position="bottom" onclick="AllocateFPR(0)" style="cursor:pointer">Fixed &nbsp;</span></span>
-                      <span class="input-group-addon"><span id="Optimal-FPR" name="fpr_policy" data-tooltip="Distribute the memory to minimize the non-result point lookup cost" data-tooltip-position="bottom" onclick="AllocateFPR(1)" style="cursor:pointer" >Optimal for No-result &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="Even-FPR" name="fpr_policy" data-tooltip="Assign the same false positive rate to every run's filter" data-tooltip-position="bottom" onclick="AllocateFPR(0)" style="cursor:pointer">Fixed &nbsp;</span></span>
+                      <span class="input-group-addon"><span id="Optimal-FPR" name="fpr_policy" data-tooltip="Assign more bits per entry to smaller levels so at to minimize the sum of false positives across al runs" data-tooltip-position="bottom" onclick="AllocateFPR(1)" style="cursor:pointer" >Optimal &nbsp;</span></span>
                     </div>
                     <br>
                     <div class="input-group">
@@ -597,7 +597,7 @@
                 <div class="row">
                   <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Required Storage (including obsolete entries) " data-tooltip-position="bottom">
-                      <p>Storage</p>
+                      <p>Storage Space</p>
                     </span>
                   </div>
                   <div id="lsh_table_storage" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center;">
@@ -606,7 +606,7 @@
                 <div class="row">
                   <div class="col-lg-7 col-md-7 col-sm-7" style="">
                     <span data-tooltip="Required Memory " data-tooltip-position="bottom">
-                      <p style="font-weight:bold">Memory</p>
+                      <p style="font-weight:bold">Memory Footprint</p>
                     </span>
                   </div>
                   <div id="lsh_table_memory" class="col-lg-5 col-md-5 col-sm-5" style="text-align:center;">

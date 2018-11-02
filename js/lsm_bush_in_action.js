@@ -853,7 +853,7 @@ function initScenario2(){
 	document.getElementById("lsm_bush_L").value=3;
 	document.getElementById("lsm_bush_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_bush_mfilter_per_entry").value= 10 // bits per element
-	document.getElementById("lsm_bush_T").value = 64;
+	document.getElementById("lsm_bush_T").value = 58.0705661;
 	document.getElementById("lsm_bush_T").readOnly=true;
 	document.getElementById("lsm_bush_K").value = 2;
 	document.getElementsByName("lsm_bush_type")[1].style.fontWeight='bold';
@@ -868,7 +868,7 @@ function initScenario3(){
 	document.getElementById("lsm_tree_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_tree_mfilter_per_entry").value=10; //0 bits per element
 	document.getElementById("lsm_tree_L").value=6;
-	document.getElementById("lsm_tree_T").value=8.9796964;
+	document.getElementById("lsm_tree_T").value=8.8473431;
 	document.getElementsByName("lsm_tree_type")[0].style.fontWeight='bold';
 
 	scenario3();
@@ -885,7 +885,7 @@ function init(){
 
 	// Workload
 	document.getElementById("s").value = 8192;
-	document.getElementById("UI-ratio").value = 1;
+	document.getElementById("UI-ratio").value = 0.25;
 	document.getElementById("w").value = 0.5;
 	document.getElementById("r").value = 0.0;
 	document.getElementById("v").value = 0.499999;
@@ -1313,9 +1313,9 @@ function draw_lsm_graph(prefix) {
 
 										var fpr = calc_R(filters[i]);
 										if(fpr < 0.00001){
-											message += " False positive rate of this level is " + fpr.toExponential(3) + "."
+											message += " False positive rate of each individual run is " + fpr.toExponential(3) + "."
 										}else{
-											message += " False positive rate of this level is " + (fpr*100).toFixed(3) + "%."
+											message += " False positive rate of each individual run is " + (fpr*100).toFixed(3) + "%."
 										}
 
 
@@ -1360,7 +1360,7 @@ function draw_lsm_graph(prefix) {
 
 		var text_array = [
 			"Update",
-			"Long Range Lookup",
+			"Range Lookup",
 			"Existing Point Lookup",
 			"Zero-result Point Lookup",
 			//"Space Amplification"
@@ -1526,7 +1526,7 @@ function lsh_table_cost(){
 
 	var text_array = [
 		"Update",
-		"Long Range Lookup",
+		"Range Lookup",
 		"Existing Point Lookup",
 		"Zero-result Point Lookup",
 		//"Space Amplification"

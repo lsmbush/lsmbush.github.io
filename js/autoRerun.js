@@ -28,7 +28,7 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
         lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
       }
       document.getElementById("lsm_bush_L").value = L;
-      document.getElementById("lsm_bush_T").value = lsm_bush_T;
+      document.getElementById("lsm_bush_T").value = lsm_bush_T.toFixed(8);
   }else if(lsm_bush_type == 5){
       var L = lsm_bush_L;
       if(L > maxL){
@@ -37,7 +37,7 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
         console.log("L="+L+" is larger than the maximum L="+maxL+" in LSM-bush.");
         L = maxL;
       }
-      var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
+      var lsm_bush_T = (getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K)).toFixed(8);
       document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
 
   }else if(lsm_bush_type == 6){

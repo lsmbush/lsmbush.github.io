@@ -1066,6 +1066,7 @@ function draw_lsm_graph(prefix) {
 			if(leveltier < 4){
 				Y = calc_Y(mfilter_per_entry, K, Z, T, L)
 			}
+			document.getElementById(prefix+"_L").value = L;
 
 	    //get BF allocation
 
@@ -2754,7 +2755,7 @@ function getLSMTreeT(lsm_tree_type){
 	}
 	while(Tmax - Tmin > 1e-8){
 		tmpT = (Tmin + Tmax)/2;
-		tmpL = Math.log(tmpN*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
+		tmpL = Math.log(tmpN*amp(tmpT)*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
 		if(tmpL < L){
 			Tmax = tmpT;
 		}else if(tmpL > L){
@@ -2763,7 +2764,13 @@ function getLSMTreeT(lsm_tree_type){
 			break;
 		}
 	}
-	var maxL = Math.ceil(Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT));
+	tmpT = Tmin;
+	var maxL = Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT);
+	if(Math.abs(Math.round(maxL) - maxL) < 1e-6){
+		maxL = Math.round(maxL);
+	}else{
+		maxL = Math.ceil(maxL);
+	}
 	return [Math.ceil(tmpT*10000000)/10000000, maxL];
 }
 

@@ -331,7 +331,10 @@
                       </div>
                       <br>
                       <div class="input-group">
-                        <span class="input-group-addon"><span data-tooltip="This parameter controls the balance between updates vs. insertions among writes in the workload. When set to 0, there only insertions and so all existing entries are unique. When set to 1, there are only updates, and this leads to the highest possible number of obsolete entries in each of the structures. This parameter can assume any value between 0 and 1 to show the resulting space-amplification arising from different balances between inserts and updates" data-tooltip-position="bottom"> Obsolescence Coefficient </span></span>
+                        <!-- <span class="input-group-addon"><span data-tooltip="This parameter controls the balance between updates vs. insertions among writes in the workload. When set to 0, there only insertions and so all existing entries are unique. When set to 1, there are only updates, and this leads to the highest possible number of obsolete entries in each of the structures. This parameter can assume any value between 0 and 1 to show the resulting space-amplification arising from different balances between inserts and updates" data-tooltip-position="bottom"> Obsolescence Coefficient </span></span> -->
+
+                        <span class="input-group-addon"><span data-tooltip="Obsolescence Coefficient" data-tooltip-position="bottom"> Obsolescence Coefficient </span></span>
+
                         <input id="UI-ratio" type="text" class="form-control" aria-label="Update/Insert ratio" placeholder=" ui_ratio (e.g., 1)"  style="text-align:right" onchange="re_run(event, 'input4')" onwheel="re_run(event, 'input4')" />
                       </div>
                     </div>

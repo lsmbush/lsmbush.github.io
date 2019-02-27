@@ -853,7 +853,7 @@ function initScenario2(){
 	document.getElementById("lsm_bush_L").value=3;
 	document.getElementById("lsm_bush_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_bush_mfilter_per_entry").value= 10 // bits per element
-	document.getElementById("lsm_bush_T").value = 58.0705661;
+	document.getElementById("lsm_bush_T").value = 60.1153689;
 	document.getElementById("lsm_bush_T").readOnly=true;
 	document.getElementById("lsm_bush_K").value = 2;
 	document.getElementsByName("lsm_bush_type")[1].style.fontWeight='bold';
@@ -868,7 +868,7 @@ function initScenario3(){
 	document.getElementById("lsm_tree_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_tree_mfilter_per_entry").value=10; //0 bits per element
 	document.getElementById("lsm_tree_L").value=6;
-	document.getElementById("lsm_tree_T").value=8.8473431;
+	document.getElementById("lsm_tree_T").value=9.1417232;
 	document.getElementsByName("lsm_tree_type")[0].style.fontWeight='bold';
 
 	scenario3();
@@ -1038,7 +1038,7 @@ function draw_lsm_graph(prefix) {
 			// N = tmpN;
 			maxT = Math.pow(N*E/mbuffer/2, 1/(Math.pow(2, L-1) - 1));
 			maxN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, maxT);
-			tmpN = ui_ratio*(maxN - N) + N;
+			tmpN = (ui_ratio + 1)*N;
 			X = tmpN - N;
 			tmp_mfilter_bits = mfilter_per_entry*tmpN;
 		}else{
@@ -1048,7 +1048,7 @@ function draw_lsm_graph(prefix) {
 			L = inputParameters.L;
 			maxT = Math.pow((N*Z*E/mbuffer),1/L);
 			maxN = N*Z*(1-1/Math.pow(maxT, L+1))/(1-1/maxT);
-			tmpN = ui_ratio*(maxN - N) + N;
+			tmpN = (ui_ratio + 1)*N;
 			X = tmpN - N;
 			//N = N*Z;
 			tmp_mfilter_bits = mfilter_per_entry*tmpN;
@@ -2745,15 +2745,17 @@ function getLSMTreeT(lsm_tree_type){
 	var Z = inputParameters.fluidZ;
 	var mbuffer = inputParameters.mbuffer;
 	var Tmin = 2;
-	var Tmax = Math.pow(N*Z/(mbuffer/E), 1/L);
 	var maxN = N*Z*(1-1/Math.pow(Tmax, L+1))/(1-1/Tmax);
-	var tmpN = ui_ratio*(maxN - N) + N;
-	var tmpT;
+	var tmpN = (ui_ratio + 1)*N;
+	var Tmax = Math.pow(tmpN/(mbuffer/E)+1, 1/L);
+
 	var amp = function(x){return 1;};
-	if(lsm_tree_type == 0){
-		amp = function(x){return Math.floor(x)-1;}
-	}
-	while(Tmax - Tmin > 1e-8){
+	// if(lsm_tree_type == 0){
+	// 	amp = function(x){return Math.floor(x)-1;}
+	// }
+	var tmpT = (Tmin + Tmax)/2;
+	var tmpL = Math.log(tmpN*amp(tmpT)*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
+	while(Math.abs(tmpL - L) > 1e-8){
 		tmpT = (Tmin + Tmax)/2;
 		tmpL = Math.log(tmpN*amp(tmpT)*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
 		if(tmpL < L){
@@ -2764,7 +2766,7 @@ function getLSMTreeT(lsm_tree_type){
 			break;
 		}
 	}
-	tmpT = Tmin;
+	tmpT = Tmax;
 	var maxL = Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT);
 	if(Math.abs(Math.round(maxL) - maxL) < 1e-6){
 		maxL = Math.round(maxL);

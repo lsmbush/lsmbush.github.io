@@ -1745,14 +1745,14 @@ function getLLBushAccurateT(L, N, E, mbuffer, LLBushK){
 
 	var Tmin = getLLBushT(L, baseNmin, E, mbuffer, LLBushK);
 	var Tmax = getLLBushT(L, baseNmax, E, mbuffer, LLBushK);
-	while(Math.abs(Tmin - Tmax) > 5e-7){
+	while(Tmax - Tmin > 1e-7){
 		baseNmax = N/(1+ 1/LLBushK*getSumOfProgression(Tmax, L));
 		Tmax = getLLBushT(L, baseNmax, E, mbuffer, LLBushK);
 
 		baseNmin = N/(1+ 1/LLBushK*getSumOfProgression(Tmin, L));
 		Tmin = getLLBushT(L, baseNmin, E, mbuffer, LLBushK);
 	}
-	var finalT = (Tmin+Tmax)/2;
+	var finalT = (Tmin+3*Tmax)/4;
 	if(Math.abs(finalT - Math.round(finalT)) < 5e-7){
 		finalT = Math.round(finalT);
 	}

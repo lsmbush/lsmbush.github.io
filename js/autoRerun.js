@@ -1,17 +1,13 @@
 var timer=null;
 
-function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E, ui_ratio){
-  var tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, lsm_bush_L-1)-1));
-  if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
-    tmpT = Math.round(tmpT);
-  }
-  var maxN = getLLBushN_baseN(lsm_bush_L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT);
-  var tmpN = N*(1 + ui_ratio);
+function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E, obsolete_coefficient){
+  //var maxN = getLLBushN_baseN(lsm_bush_L, N, E, lsm_bush_mbuffer, lsm_bush_K, tmpT);
+  var maxN = N*(1 + 1/3 + 1/Math.pow(2, lsm_bush_T));
+  var tmpN = N + obsolete_coefficient*(maxN - N);
 
   // get max L
   var L = getLLBushL(tmpN, E, lsm_bush_mbuffer, lsm_bush_K, 2);
-  tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L)-1));
-  tmpN = N*(1 + ui_ratio);
+
   var least_lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
   while(least_lsm_bush_T < 2){
     L -= 1;
@@ -19,37 +15,35 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
       L += 1;
       break;
     }
-    tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
-    if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
-      tmpT = Math.round(tmpT);
-    }
-    tmpN = N*(1 + ui_ratio);
+    tmpN = N + obsolete_coefficient*N*(1/3 + 1/Math.pow(2, least_lsm_bush_T))
     least_lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
   }
   maxL = L;
   document.getElementById("LSM-Bush").setAttribute("data-tooltip","LSM-bush merges newer data more lazily by gathering more runs at smaller levels before merging them. For this configuration, it can be tuned with 3 to "+maxL+" levels. ");
 
+  var tmpT = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
+  do{
+    least_lsm_bush_T = tmpT;
+    maxN = N*(1 + 1/3 + 1/Math.pow(2, tmpT));
+    tmpN = N + obsolete_coefficient*(maxN - N);
+    tmpT = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
+  }while(Math.abs(tmpT - least_lsm_bush_T) > 1e-6);
+
 
   if(lsm_bush_type == 4){
-      L = getLLBushL(tmpN, E, lsm_bush_mbuffer, lsm_bush_K, 2);
-      tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L)-1));
-      tmpN = N*(1 + ui_ratio);
-      var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
-      while(lsm_bush_T < 2){
-        L -= 1;
-        if(L < 3){
-          L += 1;
-          break;
-        }
-        tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
-        if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
-          tmpT = Math.round(tmpT);
-        }
-        tmpN = N*(1 + ui_ratio);
-        lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
-      }
-      document.getElementById("lsm_bush_L").value = L;
-      document.getElementById("lsm_bush_T").value = lsm_bush_T.toFixed(8);
+      // L = getLLBushL(tmpN, E, lsm_bush_mbuffer, lsm_bush_K, 2);
+      // var lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
+      // while(lsm_bush_T < 2){
+      //   L -= 1;
+      //   if(L < 3){
+      //     L += 1;
+      //     break;
+      //   }
+      //   tmpN = N + obsolete_coefficient*N*(1/3 + 1/Math.pow(2, lsm_bush_T));
+      //   lsm_bush_T = getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K);
+      // }
+      document.getElementById("lsm_bush_L").value = maxL;
+      document.getElementById("lsm_bush_T").value = least_lsm_bush_T.toFixed(7);
   }else if(lsm_bush_type == 5){
       L = lsm_bush_L;
       if(L > maxL){
@@ -58,24 +52,24 @@ function update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_
         console.log("L="+L+" is larger than the maximum L="+maxL+" in LSM-bush.");
         L = maxL;
       }
-      var lsm_bush_T = (getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K)).toFixed(8);
+      var lsm_bush_T = (getLLBushAccurateT(L, tmpN, E, lsm_bush_mbuffer, lsm_bush_K)).toFixed(7);
       document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
 
   }else if(lsm_bush_type == 6){
     L = 3;
-    var tmpT = Math.pow(N*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
+    var tmpT = Math.pow(tmpN*E/lsm_bush_mbuffer/2, 1/(Math.pow(2, L-1)-1));
     if(Math.abs(tmpT - Math.round(tmpT)) < 1e-6){
       tmpT = Math.round(tmpT);
     }
-    var tmpN = N*(1 + ui_ratio);
+    var tmpN = N + obsolete_coefficient*N*(1/3 + 1/Math.pow(2, tmpT));
     var lsm_bush_T = getLLBushAccurateT(3, tmpN, E, lsm_bush_mbuffer, lsm_bush_K)
     document.getElementById("lsm_bush_T").value = Math.max(lsm_bush_T, 2);
   }
   draw_lsm_graph("lsm_bush");
 }
 
-function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E, ui_ratio){
-  if(id == 'lsm_tree_L' || id == 'UI-ratio'){
+function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E, obsolete_coefficient){
+  if(id == 'lsm_tree_L' || id == 'obsolete_coefficient' || id == 'lsm_tree_Z'){
     var result = getLSMTreeT(lsm_tree_type);
     var T = result[0];
     var maxL = result[1];
@@ -103,12 +97,11 @@ function update_lsm_tree(id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbu
       L = Math.ceil(L);
     }
     var tmpN;
-    // if(lsm_tree_type == 0){
-    //   tmpN = ui_ratio*((1 - 1/Math.pow(lsm_tree_T, L))/(1 - 1/lsm_tree_T)*N*(Math.floor(lsm_tree_T)-1) + lsm_tree_mbuffer/E - N)+N;
-    // }else{
-    //   tmpN = ui_ratio*((1 - 1/Math.pow(lsm_tree_T, L))/(1 - 1/lsm_tree_T)*N + lsm_tree_mbuffer/E - N) + N;
-    // }
-    tmpN = N*(1+ui_ratio)
+    if(lsm_tree_type == 0){
+      tmpN = obsolete_coefficient*((1 - 1/Math.pow(lsm_tree_T, L))/(1 - 1/lsm_tree_T)*N*(Math.floor(lsm_tree_T)-1) + lsm_tree_mbuffer/E - N)+N;
+    }else{
+      tmpN = obsolete_coefficient*((1 - 1/Math.pow(lsm_tree_T, L))/(1 - 1/lsm_tree_T)*N + lsm_tree_mbuffer/E - N) + N;
+    }
     L = Math.log(tmpN*E*(lsm_tree_T-1)/lsm_tree_mbuffer+1)/Math.log(lsm_tree_T)-1;
     if(Math.abs(L - Math.round(L))<1e-6){
       L = Math.round(L);
@@ -168,23 +161,27 @@ function re_run(e) {
     var v=parseFloat(document.getElementById("v").value);
     var qL=parseFloat(document.getElementById("qL").value);
 
-    var ui_ratio_str = document.getElementById("UI-ratio").value;
-    if(isNaN(ui_ratio_str)){
-      alert(ui_ratio_str+" is not valid.")
-      console.log("UI ratio is not valid: "+ui_ratio_str)
-      document.getElementById("UI-ratio").value=1.0;
+    var obsolete_coefficient = document.getElementById("obsolete_coefficient").value;
+    if(isNaN(obsolete_coefficient)){
+      alert(obsolete_coefficient+" is not valid.")
+      console.log("Obsolescence coefficient is not valid: "+obsolete_coefficient)
+      document.getElementById("obsolete_coefficient").value=1.0;
     }
-    var ui_ratio = parseFloat(ui_ratio_str);
-    if(ui_ratio > 1 || ui_ratio < 0){
-      alert(ui_ratio+" should be in the range of [0, 1].")
-      console.log("UI ratio should be in the range of (0, 1) :"+key_size)
-      document.getElementById("UI-ratio").value=1.0;
+    var obsolete_coefficient = parseFloat(obsolete_coefficient);
+    if(obsolete_coefficient > 1 || obsolete_coefficient < 0){
+      alert(obsolete_coefficient+" should be in the range of [0, 1].")
+      console.log("Obsolescence coefficient should be in the range of (0, 1) :"+key_size)
+      document.getElementById("obsolete_coefficient").value=1.0;
     }
 
     if(r <= 0.0){
       document.getElementById("Zero-result-lookup-text-Div").style.display='none';
+      document.getElementById("lsm_bush_zero_result_lookup").style.display='none';
+      document.getElementById("lsm_tree_zero_result_lookup").style.display='none';
     }else{
       document.getElementById("Zero-result-lookup-text-Div").style.display='';
+      document.getElementById("lsm_bush_zero_result_lookup").style.display='';
+      document.getElementById("lsm_tree_zero_result_lookup").style.display='';
     }
 
     document.getElementById("data_size_text").innerText=formatBytes(N*E,1);
@@ -239,6 +236,32 @@ function re_run(e) {
         document.getElementById("lsh_table_gc_threshold").value = 0.5;
         hash_table_gc_threshold = 0.5;
     }
+    var hash_table_key_signature_size = document.getElementById("lsh_table_key_signature_size").value;
+    if(isNaN(hash_table_key_signature_size) || Number.isInteger(hash_table_key_signature_size)){
+      alert("The size of key signature="+hash_table_key_signature_size+" is invalid.");
+      console.log("Thesize of key signature is invalid: "+hash_table_key_signature_size);
+      document.getElementById("lsh_table_key_signature_size").value = 10;
+      hash_table_key_signature_size = 10;
+    }
+    hash_table_key_signature_size = parseInt(hash_table_key_signature_size);
+    if(hash_table_key_signature_size < 0){
+      alert("The size of key signature="+hash_table_key_signature_size+" should be no less than 0.");
+      document.getElementById("lsh_table_key_signature_size").value = 10;
+      hash_table_key_signature_size = 10;
+    }
+    var hash_table_hash_bucket_fraction = document.getElementById("lsh_table_hash_bucket_fraction").value;
+    if(isNaN(hash_table_hash_bucket_fraction)){
+      alert("The bucket fraction="+hash_table_hash_bucket_fraction+" is invalid.");
+      console.log("The bucket fraction is invalid: "+hash_table_hash_bucket_fraction);
+      document.getElementById("lsh_table_hash_bucket_fraction").value = 1;
+      hash_table_hash_bucket_fraction = 10;
+    }
+    hash_table_hash_bucket_fraction = parseFloat(hash_table_hash_bucket_fraction);
+    if(hash_table_hash_bucket_fraction <= 0 || hash_table_hash_bucket_fraction > 1){
+      alert("The bucket fraction="+hash_table_hash_bucket_fraction+" should be in the range (0, 1].");
+      document.getElementById("lsh_table_hash_bucket_fraction").value = 1;
+      hash_table_hash_bucket_fraction = 1;
+    }
     scenario1();
 
     // lsm tree
@@ -247,12 +270,8 @@ function re_run(e) {
       alert("LSM-Tree Level="+L+" is invalid.")
       console.log("LSM-Tree level is invalid: "+L);
       var tmpN;
-      // if(lsm_tree_type == 0){
-      //   tmpN = ui_ratio*((1 - 1/lsm_tree_T)/(1 - 1/(Math.pow(lsm_tree_T, L)))*N*(Math.floor(lsm_tree_T)-1) - N)+N;
-      // }else{
-      //   tmpN = ui_ratio*((1 - 1/lsm_tree_T)/(1 - 1/(Math.pow(lsm_tree_T, L)))*N - N) + N;
-      // }
-      tmpN = (1+ui_ratio)*N
+      var maxN = N*(Z + 1/T);
+      tmpN = N + obsolete_coefficient*(maxN - N);
       L = Math.ceil(Math.log(tmpN*E*(lsm_tree_T-1)/lsm_tree_mbuffer+1/lsm_tree_T)/Math.log(lsm_tree_T))
       document.getElementById("lsm_tree_L").value = L;
       lsm_tree_L = L;
@@ -293,7 +312,7 @@ function re_run(e) {
         lsm_tree_T = 2;
     }
     var lsm_tree_type=getBoldButtonByName("lsm_tree_type");
-    update_lsm_tree(event.target.id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E, ui_ratio);
+    update_lsm_tree(event.target.id, lsm_tree_type, lsm_tree_L, lsm_tree_T, lsm_tree_mbuffer, N, E, obsolete_coefficient);
 
 
     // lsm bush
@@ -325,9 +344,8 @@ function re_run(e) {
     if(isNaN(lsm_bush_L)){
       alert("LSM-Bush Level="+lsm_bush_L+" is invalid.")
       console.log("LSM-Bush Level is invalid: "+Level);
-      var maxL = Math.ceil(Math.log(Math.log(N*E/lsm_bush_mbuffer/2)/Math.log(lsm_tree_T)+1)/Math.log(2));
-      var maxN = getLLBushN_baseN(maxL, N, E, lsm_bush_mbuffer, lsm_bush_K, lsm_tree_T);
-      var tmpN = N*(1 + ui_ratio);
+      var maxN = N*(1 + 1/3 + 1/Math.pow(2, lsm_bush_T));
+      var tmpN = N + obsolete_coefficient*(maxN - N);
       lsm_bush_L = getLLBushL(tmpN, E, lsm_bush_mbuffer, lsm_bush_K, lsm_bush_T);
       document.getElementById("lsm_bush_L").value = lsm_bush_L;
     }
@@ -343,7 +361,7 @@ function re_run(e) {
     var lsm_bush_type = getBoldButtonByName("lsm_bush_type");
     re_run_now();
 
-    update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E, ui_ratio);
+    update_lsm_bush(lsm_bush_type, lsm_bush_L, lsm_bush_T, lsm_bush_K, lsm_bush_mbuffer, N, E, obsolete_coefficient);
 
 }
 

@@ -44,26 +44,30 @@ function parseInputTextBoxes(prefix="lsm_bush")
 
 		//Workload
 		parsedBoxes.s = parseInt(document.getElementById("s").value.replace(/\D/g,''), 10);
-		parsedBoxes.ui_ratio = parseFloat(document.getElementById("UI-ratio").value);
+		parsedBoxes.obsolete_coefficient = parseFloat(document.getElementById("obsolete_coefficient").value);
 		parsedBoxes.w = parseFloat(document.getElementById("w").value);
 		parsedBoxes.r = parseFloat(document.getElementById("r").value);
 		parsedBoxes.v = parseFloat(document.getElementById("v").value);
 		parsedBoxes.qL = parseFloat(document.getElementById("qL").value);
 
 		// Configuration for an architecture
-		parsedBoxes.L = parseInt(document.getElementById(prefix+"_L").value.replace(/\D/g,''), 10);
-		parsedBoxes.mbuffer = parseFloat(document.getElementById(prefix+"_mbuffer").value.replace(/\D/g,''))*1048576;
-    parsedBoxes.T = parseFloat(document.getElementById(prefix+"_T").value);
-    parsedBoxes.mfilter_per_entry = parseFloat(document.getElementById(prefix+"_mfilter_per_entry").value);
-		parsedBoxes.mfence_pointer_per_entry = parseFloat(document.getElementById(prefix+"_mfence_pointer_per_entry").value);
-		parsedBoxes.hash_table_gc_threshold = parseFloat(document.getElementById("lsh_table_gc_threshold").value);
-    parsedBoxes.leveltier = getBoldButtonByName(prefix+"_type");
-		parsedBoxes.isOptimalFPR = true;
-		if(prefix == "lsm_tree"){
-			parsedBoxes.isOptimalFPR = getBoldButtonByName("fpr_policy"); // 0 -> fixed; 1 -> optimal for non-result point lookup ; 2 -> optimal for point lookup
+		if(prefix != "lsh_table"){
+			parsedBoxes.L = parseInt(document.getElementById(prefix+"_L").value.replace(/\D/g,''), 10);
+			parsedBoxes.T = parseFloat(document.getElementById(prefix+"_T").value);
+			parsedBoxes.mfilter_per_entry = parseFloat(document.getElementById(prefix+"_mfilter_per_entry").value);
+			parsedBoxes.mfence_pointer_per_entry = parseFloat(document.getElementById(prefix+"_mfence_pointer_per_entry").value);
+			parsedBoxes.leveltier = getBoldButtonByName(prefix+"_type");
+			parsedBoxes.isOptimalFPR = true;
+			if(prefix == "lsm_tree"){
+				parsedBoxes.isOptimalFPR = getBoldButtonByName("fpr_policy"); // 0 -> fixed; 1 -> optimal for non-result point lookup ; 2 -> optimal for point lookup
+			}
+		}else{
+			parsedBoxes.hash_table_gc_threshold = parseFloat(document.getElementById("lsh_table_gc_threshold").value);
+			parsedBoxes.hash_table_key_signature_size = parseInt(document.getElementById("lsh_table_key_signature_size").value);
+			parsedBoxes.hash_table_hash_bucket_fraction = parseFloat(document.getElementById("lsh_table_hash_bucket_fraction").value);
 		}
 
-
+		parsedBoxes.mbuffer = parseFloat(document.getElementById(prefix+"_mbuffer").value.replace(/\D/g,''))*1048576;
 
 		if(parsedBoxes.leveltier == 3){
 			parsedBoxes.fluidK = parseInt(document.getElementById("Fluid LSM-Tree K").value.replace(/\D/g,''), 10);
@@ -843,6 +847,8 @@ function initScenario1(){
 	// LSH-Table
 	document.getElementById("lsh_table_mbuffer").value=2; //in MB
 	document.getElementById("lsh_table_gc_threshold").value=0.5;
+	document.getElementById("lsh_table_key_signature_size").value=10;
+	document.getElementById("lsh_table_hash_bucket_fraction").value=1;
 	scenario1();
 }
 
@@ -853,7 +859,7 @@ function initScenario2(){
 	document.getElementById("lsm_bush_L").value=3;
 	document.getElementById("lsm_bush_mfence_pointer_per_entry").value=8*8/(4096/16);
 	document.getElementById("lsm_bush_mfilter_per_entry").value= 10 // bits per element
-	document.getElementById("lsm_bush_T").value = 60.1153689;
+	document.getElementById("lsm_bush_T").value = 58.8645513;
 	document.getElementById("lsm_bush_T").readOnly=true;
 	document.getElementById("lsm_bush_K").value = 2;
 	document.getElementsByName("lsm_bush_type")[1].style.fontWeight='bold';
@@ -885,7 +891,7 @@ function init(){
 
 	// Workload
 	document.getElementById("s").value = 8192;
-	document.getElementById("UI-ratio").value = 0.25;
+	document.getElementById("obsolete_coefficient").value = 0.25;
 	document.getElementById("w").value = 0.5;
 	document.getElementById("r").value = 0.0;
 	document.getElementById("v").value = 0.499999;
@@ -1024,7 +1030,7 @@ function draw_lsm_graph(prefix) {
 		var qS=inputParameters.qS;
 		var lsm_bush_K=inputParameters.lsm_bush_K;
 		var X=inputParameters.X;
-		var ui_ratio = inputParameters.ui_ratio;
+		var obsolete_coefficient = inputParameters.obsolete_coefficient;
 
 		var tmp_mfilter_bits;
 		var filters;
@@ -1036,23 +1042,19 @@ function draw_lsm_graph(prefix) {
 			// tmpX = Math.floor(getLLBushN(L, E, mbuffer, lsm_bush_K, T) - tmpN);
 			// X = N - tmpN;
 			// N = tmpN;
-			maxT = Math.pow(N*E/mbuffer/2, 1/(Math.pow(2, L-1) - 1));
-			maxN = getLLBushN_baseN(L, N, E, mbuffer, lsm_bush_K, maxT);
-			tmpN = (ui_ratio + 1)*N;
-			X = tmpN - N;
-			tmp_mfilter_bits = mfilter_per_entry*tmpN;
+			maxN = N*(1 + 1/3 + 1/(Math.pow(2, T)))
+
 		}else{
 			// var tmpN = mbuffer/E*Math.pow(T, L-1)
 			// tmpX = N - Math.floor(Math.min(Math.floor(N/tmpN), T)*tmpN);
 			// N = Math.ceil(Math.min(Math.floor(N/tmpN), T)*tmpN);
 			L = inputParameters.L;
-			maxT = Math.pow((N*Z*E/mbuffer),1/L);
-			maxN = N*Z*(1-1/Math.pow(maxT, L+1))/(1-1/maxT);
-			tmpN = (ui_ratio + 1)*N;
-			X = tmpN - N;
-			//N = N*Z;
-			tmp_mfilter_bits = mfilter_per_entry*tmpN;
+			maxN = N*(Z + 1/T);
 		}
+
+		tmpN = N + obsolete_coefficient*(maxN - N);
+		X = tmpN - N;
+		tmp_mfilter_bits = mfilter_per_entry*tmpN;
 
 			var L;
 			if(leveltier < 4){
@@ -1478,15 +1480,17 @@ function draw_lsm_graph(prefix) {
 }
 
 function lsh_table_cost(){
-	var inputParameters = parseInputTextBoxes();
+	var inputParameters = parseInputTextBoxes("lsh_table");
 
 	var N = inputParameters.N;
 	var P = inputParameters.P;
 	var E = inputParameters.E;
-	var ui_ratio = inputParameters.ui_ratio;
+	var obsolete_coefficient = inputParameters.obsolete_coefficient;
 	var B = P/E;
 	var key_size=inputParameters.key_size;
 	var hash_table_gc_threshold=inputParameters.hash_table_gc_threshold;
+	var hash_table_key_signature_size=inputParameters.hash_table_key_signature_size;
+	var hash_table_hash_bucket_fraction=inputParameters.hash_table_hash_bucket_fraction;
 	var read_latency = inputParameters.read_latency;
 	var write_latency = inputParameters.write_latency;
 	var w=inputParameters.w;
@@ -1505,13 +1509,17 @@ function lsh_table_cost(){
 		"text-align: center"
 	];
 
+	var maxN = N/(1 - hash_table_gc_threshold);
+	var tmpN = N + obsolete_coefficient*(maxN - N);
+	var min_pointer_size = Math.ceil(Math.log(tmpN/B)/Math.log(2))
+	var chain_length = 1.0/hash_table_hash_bucket_fraction;
 	lsh_table_array = [
 		1/(B*hash_table_gc_threshold),
-		N/B,
+		tmpN/B,
 		"1",
-		"0",
-		N*key_size*8,
-		N*E*8*(1+ui_ratio*hash_table_gc_threshold)
+		Math.pow(2, -hash_table_key_signature_size)*chain_length,
+		N*(hash_table_key_signature_size + hash_table_hash_bucket_fraction*min_pointer_size),
+		tmpN*E*8
 	];
 
 	var sum=r+qL+v+w;
@@ -2738,16 +2746,16 @@ function AllocateFPR(fpr_type){
 
 function getLSMTreeT(lsm_tree_type){
 	var inputParameters = parseInputTextBoxes('lsm_tree');
-	var ui_ratio = inputParameters.ui_ratio;
+	var obsolete_coefficient = inputParameters.obsolete_coefficient;
 	var N = inputParameters.N;
 	var L = inputParameters.L;
 	var E = inputParameters.E;
 	var Z = inputParameters.fluidZ;
 	var mbuffer = inputParameters.mbuffer;
+	var tmpN;
 	var Tmin = 2;
-	var maxN = N*Z*(1-1/Math.pow(Tmax, L+1))/(1-1/Tmax);
-	var tmpN = (ui_ratio + 1)*N;
-	var Tmax = Math.pow(tmpN/(mbuffer/E)+1, 1/L);
+	var Tmax = Math.pow(N*Z/(mbuffer/E), 1/L);
+	var tmpT;
 
 	var amp = function(x){return 1;};
 	// if(lsm_tree_type == 0){
@@ -2755,9 +2763,10 @@ function getLSMTreeT(lsm_tree_type){
 	// }
 	var tmpT = (Tmin + Tmax)/2;
 	var tmpL = Math.log(tmpN*amp(tmpT)*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
-	while(Math.abs(tmpL - L) > 1e-8){
+	while(Tmax - Tmin > 1e-8){
 		tmpT = (Tmin + Tmax)/2;
-		tmpL = Math.log(tmpN*amp(tmpT)*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
+		tmpN = N*(1 + obsolete_coefficient*(Z + 1/tmpT - 1));
+		tmpL = Math.log(tmpN*E*(tmpT - 1)/mbuffer+ 1)/Math.log(tmpT)-1;
 		if(tmpL < L){
 			Tmax = tmpT;
 		}else if(tmpL > L){
@@ -2766,7 +2775,8 @@ function getLSMTreeT(lsm_tree_type){
 			break;
 		}
 	}
-	tmpT = Tmax;
+	tmpT = Tmin;
+	tmpN = N*(1 + obsolete_coefficient*(Z + 1/tmpT - 1));
 	var maxL = Math.log(tmpN*E*(tmpT - 1)/mbuffer/tmpT+ 1/tmpT)/Math.log(tmpT);
 	if(Math.abs(Math.round(maxL) - maxL) < 1e-6){
 		maxL = Math.round(maxL);
